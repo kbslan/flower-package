@@ -1,113 +1,155 @@
-import { register, login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { register, login, logout, passwordReset, getInfo } from '@/api/user'
+import { getToken, setToken, removeToken, getMobile, setMobile, removeMobile, getPassword, setPassword, removePassword, getRememberMe, setRememberMe, removeRememberMe, getPermissions, setPermissions, removePermissions } from '@/utils/auth'
 
 const user = {
   state: {
-    token: getToken(),
+    // 用户信息
     user: {},
-    roles: [],
-    // 第一次加载菜单时用到
-    loadMenus: false
+    // 用户密码，用于记住我，自动填充
+    mobile: getMobile(),
+    password: getPassword(),
+    rememberMe: getRememberMe(),
+    // 用户token令牌
+    token: getToken(),
+    // 是否是管理员
+    isAdmin: false,
+    // 权限列表
+    permissions: getPermissions()
+
   },
 
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
-    },
     SET_USER: (state, user) => {
       state.user = user
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_MOBILE: (state, mobile) => {
+      state.mobile = mobile
     },
-    SET_LOAD_MENUS: (state, loadMenus) => {
-      state.loadMenus = loadMenus
+    SET_PASSWORD: (state, password) => {
+      state.password = password
+    },
+    SET_REMEMBER_ME: (state, rememberMe) => {
+      state.rememberMe = rememberMe
+    },
+    SET_TOKEN: (state, token) => {
+      state.token = token
+    },
+    SET_ADMIN: (state, isAdmin) => {
+      state.isAdmin = isAdmin
+    },
+    SET_PERMISSIONS: (state, permissions) => {
+      state.permissions = permissions
     }
   },
 
   actions: {
     // 注册
-    Register ({ commit }, userInfo) {
+    Register({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
-        register(userInfo).then(data => {
-          debugger
-          if (data.token) {
-            setToken(data.token, false)
-            commit('SET_TOKEN', data.token)
-            setUserInfo(data, commit)
-            // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
-            commit('SET_LOAD_MENUS', true)
-          }
-
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        register(userInfo)
+          .then((data) => {
+            const rememberMe = Boolean(getRememberMe())
+            setMobile(userInfo.mobile, rememberMe)
+            setPassword(userInfo.password, rememberMe)
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
       })
     },
     // 登录
-    Login ({ commit }, userInfo) {
-      const rememberMe = userInfo.rememberMe
+    Login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
-        login(userInfo.username, userInfo.password, userInfo.code, userInfo.uuid).then(res => {
-          setToken(res.token, rememberMe)
-          commit('SET_TOKEN', res.token)
-          setUserInfo(res.user, commit)
-          // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
-          commit('SET_LOAD_MENUS', true)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        login(userInfo)
+          .then((data) => {
+            setToken(data.token, userInfo.rememberMe)
+            commit('SET_TOKEN', data.token)
+            commit('SET_USER', data)
+            commit('SET_REMEMBER_ME', userInfo.rememberMe)
+            commit('SET_ADMIN', data.admin)
+            commit('SET_PERMISSIONS', data.permissions)
+            if (userInfo.rememberMe) {
+              setMobile(userInfo.mobile, userInfo.rememberMe)
+              setPassword(userInfo.password, userInfo.rememberMe)
+              setPermissions(data.permissions, userInfo.rememberMe)
+              setRememberMe(userInfo.rememberMe)
+              commit('SET_MOBILE', userInfo.mobile)
+              commit('SET_PASSWORD', userInfo.password)
+            } else {
+              removeMobile()
+              removePassword()
+              removeRememberMe()
+              removePermissions()
+              commit('SET_MOBILE', '')
+              commit('SET_PASSWORD', '')
+            }
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      })
+    },
+    // 修改密码
+    Reset({ commit }, userInfo) {
+      return new Promise((resolve, reject) => {
+        passwordReset(userInfo)
+          .then((data) => {
+            const rememberMe = Boolean(getRememberMe())
+            removeToken()
+            setMobile(userInfo.mobile, rememberMe)
+            setPassword(userInfo.password, rememberMe)
+            commit('SET_TOKEN', '')
+            commit('SET_MOBILE', userInfo.mobile)
+            commit('SET_PASSWORD', userInfo.password)
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
       })
     },
 
     // 获取用户信息
-    GetInfo ({ commit }) {
+    GetInfo({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(res => {
-          setUserInfo(res, commit)
-          resolve(res)
-        }).catch(error => {
-          reject(error)
-        })
+        getInfo()
+          .then((data) => {
+            commit('SET_USER', data)
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
       })
     },
     // 登出
-    Logout ({ commit }) {
+    Logout({ commit }) {
       return new Promise((resolve, reject) => {
-        logout().then(data => {
-          logOut(commit)
-          resolve()
-        }).catch(error => {
-          logOut(commit)
-          reject(error)
-        })
-      })
-    },
-
-    updateLoadMenus ({ commit }) {
-      return new Promise((resolve, reject) => {
-        commit('SET_LOAD_MENUS', false)
+        logout()
+          .then((data) => {
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
+          .finally(() => {
+            commit('SET_USER', '')
+            commit('SET_MOBILE', '')
+            commit('SET_PASSWORD', '')
+            commit('SET_TOKEN', '')
+            commit('SET_ADMIN', false)
+            commit('SET_PERMISSIONS', [])
+            removeToken()
+            removeMobile()
+            removePassword()
+            removePermissions()
+          })
       })
     }
-  }
-}
 
-export const logOut = (commit) => {
-  commit('SET_TOKEN', '')
-  commit('SET_ROLES', [])
-  removeToken()
-}
-
-export const setUserInfo = (data, commit) => {
-  // 如果没有任何权限，则赋予一个默认的权限，避免请求死循环
-  if (data.roles?.length === 0) {
-    commit('SET_ROLES', ['ROLE_SYSTEM_DEFAULT'])
-  } else {
-    commit('SET_ROLES', data.roles)
   }
-  commit('SET_USER', data)
 }
 
 export default user

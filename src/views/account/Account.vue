@@ -1,13 +1,25 @@
 <template>
   <div class="container">
     <el-form :inline="true" :model="searchForm" ref="searchForm">
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="searchForm.name" placeholder="请输入姓名">
+      <el-form-item label="用户名" prop="name">
+        <el-input v-model="searchForm.name" placeholder="请输入用户名">
         </el-input>
       </el-form-item>
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="searchForm.mobile" placeholder="请输入手机号">
         </el-input>
+      </el-form-item>
+      <el-form-item label="状态" prop="yn">
+        <el-select v-model="searchForm.yn" clearable placeholder="请选择状态" style="weight:130px">
+          <el-option v-for="item in ynList" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="管理员" prop="admin">
+        <el-select v-model="searchForm.admin" clearable placeholder="请选择管理员" style="weight:130px">
+          <el-option v-for="item in adminList" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSearch">查询</el-button>
@@ -18,76 +30,142 @@
       <el-table-column prop="id" label="ID"> </el-table-column>
       <el-table-column prop="name" label="姓名"> </el-table-column>
       <el-table-column prop="mobile" label="手机号"> </el-table-column>
-      <el-table-column prop="admin" label="是否是管理员">
+      <el-table-column prop="yn" label="状态">
         <template slot-scope="scope">
-          {{ scope.row.admin ? "是" : "否" }}
+          <el-switch v-model="scope.row.yn" name="yn" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="changeYnSwitch(scope.row)" />
         </template>
       </el-table-column>
-      <el-table-column prop="" label="操作">
+      <el-table-column prop="admin" label="管理员">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.admin" name="admin" :active-value="true" :inactive-value="false" @change="changeAdminSwitch(scope.row)" />
+        </template>
+      </el-table-column>
+      <el-table-column prop="modifierName" label="更新人"></el-table-column>
+      <el-table-column prop="modified" label="更新时间"></el-table-column>
+      <!-- <el-table-column prop="" label="操作">
         <template slot-scope="scope">
           <el-button type="primary" @click="del(scope.row.id)">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
+    <!--分页组件-->
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    </el-pagination>
   </div>
 </template>
 
 <script>
-import { accountDel } from '@/api/user'
+import { accountList, accountYn, accountAdmin } from '@/api/user'
+
 export default {
   name: 'Account',
-  data () {
+  data() {
     return {
+      value1: 1,
       searchForm: {
         name: '',
         mobile: '',
-        yn: 1,
+        yn: '',
+        admin: '',
         page: 1,
-        size: 10
+        size: 20
       },
+      pagination: {
+        // 页码
+        page: 1,
+        // 每页数据条数
+        size: 20,
+        // 总数据条数
+        total: 0
+      },
+      ynList: [
+        {
+          value: '1',
+          label: '启用'
+        },
+        {
+          value: '0',
+          label: '禁用'
+        }
+      ],
+      adminList: [
+        {
+          value: '1',
+          label: '是'
+        },
+        {
+          value: '0',
+          label: '否'
+        }
+      ],
+
+      // 表格数据
       tableData: []
     }
   },
+  mounted() {
+    this.setContent()
+    this.handleSearch()
+  },
   methods: {
-    handleSizeChange (val) {
+    setContent() {
+      const title = this.$route.meta.title
+      this.$store.dispatch('SetContent', title)
+    },
+    handleSizeChange(val) {
       this.searchForm.size = val
       this.handleSearch()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.searchForm.page = val
       this.handleSearch()
     },
-    handleSearch () {
-      this.tableData = [
-        {
-          id: 1, // 账号ID
-          name: '包花员1', // 昵称
-          mobile: '18302805247', // 手机号
-          admin: true, // 是否是管理员
-          password: '1234567', // 密码
-          yn: 1, // 状态
-          created: '2023-05-20T20:36:00', // 创建时间
-          modified: '2023-05-21T01:35:06', // 修改时间
-          salt: '', // 盐
-          permission: null // 权限
-        }
-      ]
+    handleSearch() {
+      accountList(this.searchForm).then(data => {
+        this.tableData = data.records || []
+        this.pagination.total = data.total
+      })
     },
 
-    reset () {
+    reset() {
       this.$refs.searchForm.resetFields()
       this.handleSearch()
     },
 
-    del (id) {
-      accountDel({ ids: id }).then(() => {
-        this.$message.success('删除成功')
-        this.handleSearch()
-      })
+    del(id) {
+      // accountDel({ ids: id }).then(() => {
+      //   this.$message.success('删除成功')
+      //   this.handleSearch()
+      // })
+    },
+    changeYnSwitch(row) {
+      const data = {
+        ids: [row.id],
+        status: row.yn
+      }
+      accountYn(data)
+        .then(data => {
+          this.$message.success('操作成功')
+          this.handleSearch()
+          this.loading = false
+        })
+        .catch({})
+    },
+    changeAdminSwitch(row) {
+      const data = {
+        ids: [row.id],
+        status: row.admin ? 1 : 0
+      }
+      accountAdmin(data)
+        .then(data => {
+          this.$message.success('操作成功')
+          this.handleSearch()
+          this.loading = false
+        })
+        .catch({})
     }
   }
 }
-
 </script>
 
 <style lang="less" scoped></style>

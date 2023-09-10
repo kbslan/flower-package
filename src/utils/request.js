@@ -34,7 +34,7 @@ export const createAxiosByinterceptors = (config) => {
 
   // 添加请求拦截器
   instance.interceptors.request.use(
-    function (config) {
+    function(config) {
       // 在发送请求之前做些什么
       const { loading = true } = config
       config.headers[Config.TokenKey] = getToken()
@@ -42,7 +42,7 @@ export const createAxiosByinterceptors = (config) => {
       if (loading) addLoading()
       return config
     },
-    function (error) {
+    function(error) {
       // 对请求错误做些什么
       return Promise.reject(error)
     }
@@ -50,11 +50,12 @@ export const createAxiosByinterceptors = (config) => {
 
   // 添加响应拦截器
   instance.interceptors.response.use(
-    function (response) {
+    function(response) {
       // 对响应数据做点什么
       const { loading = true } = response.config
       if (loading) cancelLoading()
       const { code, data, message } = response.data
+
       // config设置responseType为blob 处理文件下载
       if (response.data instanceof Blob) {
         return downloadFile(response)
@@ -68,7 +69,7 @@ export const createAxiosByinterceptors = (config) => {
         }
       }
     },
-    function (error) {
+    function(error) {
       // 对响应错误做点什么
       const { loading = true } = error.config
       if (loading) cancelLoading()

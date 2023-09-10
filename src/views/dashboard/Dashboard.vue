@@ -11,19 +11,25 @@
 <script>
 export default {
   name: 'Dashboard',
-  data () {
+  data() {
     return {}
   },
+  mounted() {
+    this.setContent()
+  },
   methods: {
-    flower () {
+    setContent() {
+      const title = this.$route.meta.title
+      this.$store.dispatch('SetContent', title)
+    },
+    flower() {
       this.$router.push('/flower')
     },
-    account () {
+    account() {
       this.$router.push('/account')
     }
   }
 }
-
 </script>
 
 <style lang="less" scoped>

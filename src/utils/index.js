@@ -13,7 +13,7 @@ export const downloadFile = (response) => {
   console.log('response.data.type:', response.data.type)
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader()
-    fileReader.onload = function () {
+    fileReader.onload = function() {
       try {
         console.log('result:', this.result)
         const jsonData = JSON.parse(this.result) // 成功 说明是普通对象数据

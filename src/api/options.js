@@ -1,13 +1,13 @@
 import request from '@/utils/request'
 
 // 配置分页查询
-export const configList = (data) =>
-  request({ url: '/option/config/page', data })
+export const optionsList = (data) =>
+  request({ url: '/option/config/page', method: 'POST', data })
 
 // 配置新增、编辑
-export const configSave = (data) =>
-  request({ url: '/option/config/save', data })
+export const optionsSave = (data) =>
+  request({ url: '/option/config/save', method: 'POST', data })
 
-// 逻辑删除
-export const configDel = (params) =>
-  request({ url: '/option/config/delete', params })
+// 状态变更
+export const optionsYn = (data) =>
+  request({ url: '/option/config/yn', method: 'POST', data })

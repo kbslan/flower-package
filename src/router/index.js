@@ -6,32 +6,29 @@ import Layout from '@/layout/Layout.vue'
 
 Vue.use(VueRouter)
 
-const whiteList = ['/login', '/register', '/reset']// no redirect whitelist
-
 const routes = [
   {
     path: '/register',
-    name: 'register',
     component: () => import('@/views/register/Register.vue'),
     meta: {
-      title: '注册'
+      title: '注册',
+      permission: []
+    }
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/Login.vue'),
+    meta: {
+      title: '登录',
+      permission: []
     }
   },
   {
     path: '/reset',
-    name: 'reset',
     component: () => import('@/views/reset/Reset.vue'),
     meta: {
-      title: '重置密码'
-    }
-  },
-
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/login/Login.vue'),
-    meta: {
-      title: '登录'
+      title: '修改密码',
+      permission: []
     }
   },
   {
@@ -41,54 +38,81 @@ const routes = [
       {
         path: '',
         name: '',
-        component: () => import('@/views/dashboard/Dashboard.vue'),
+        component: () => import('@/views/home/Home.vue'),
         meta: {
-          title: '首页'
+          title: '首页',
+          permission: ['normal', 'admin']
         }
       }
     ]
+  },
+  {
+    path: '/dashboard',
+    component: () => import('@/views/dashboard/Dashboard.vue'),
+    meta: {
+      title: '数据看板',
+      permission: ['admin']
+    }
   },
   {
     path: '/flower',
-    name: 'flower',
     component: Layout,
     children: [
       {
         path: '',
-        name: '',
+        name: 'flower',
         component: () => import('@/views/flower/Flower.vue'),
         meta: {
-          title: '包花管理'
+          title: '包花管理',
+          permission: ['normal', 'admin']
         }
-      }
-    ]
-  },
-  {
-    path: '/flowerAdd',
-    name: 'flowerAdd',
-    component: Layout,
-    children: [
+      },
       {
-        path: '',
-        name: '',
-        component: () => import('@/views/flowerAdd/FlowerAdd.vue'),
+        path: 'flowerAdd',
+        name: 'flowerAdd',
+        component: () => import('@/views/flower/FlowerAdd.vue'),
         meta: {
-          title: '新增包花记录'
+          title: '新增包花记录',
+          permission: ['normal', 'admin']
         }
       }
     ]
   },
   {
     path: '/account',
-    name: 'account',
     component: Layout,
     children: [
       {
         path: '',
-        name: '',
+        name: 'account',
         component: () => import('@/views/account/Account.vue'),
         meta: {
-          title: '账号管理'
+          title: '账号管理',
+          permission: ['admin']
+        }
+      }
+    ]
+  },
+  {
+    path: '/options',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'options',
+        component: () => import('@/views/options/Options.vue'),
+        meta: {
+          title: '配置项管理',
+          permission: ['admin']
+        }
+      },
+      {
+        path: 'optionsAdd',
+        name: 'optionsAdd',
+        component: () => import('@/views/options/OptionAdd.vue'),
+        meta: {
+          title: '新增配置',
+          permission: ['admin']
         }
       }
     ]
@@ -99,7 +123,7 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   // set page title
   if (to.meta.title) {
     document.title = to.meta.title + ' - ' + Config.title
@@ -113,10 +137,10 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     /* has no token */
-    if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
-      next()
+    if (to.meta.permission && to.meta.permission.length > 0) {
+      next('/login')
     } else {
-      next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
+      next()
     }
   }
 })

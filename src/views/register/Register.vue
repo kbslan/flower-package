@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-card class="login-box">
-      <div class="header">Register</div>
+      <div class="header">注册</div>
       <el-form ref="loginForm" :model="loginForm" label-width="0px" :rules="loginRules">
         <el-form-item prop="username">
           <el-input v-model="loginForm.name" placeholder="请输入用户名">
@@ -15,25 +15,24 @@
           <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" :show-password="true">
           </el-input>
         </el-form-item>
-        <el-form-item style="width: 100%;">
-          <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleRegister">
+        <el-form-item style="width: 100%">
+          <el-button :loading="loading" size="medium" type="primary" style="width: 100%" @click.native.prevent="handleRegister">
             <span v-if="!loading">注 册</span>
             <span v-else>注 册 中...</span>
           </el-button>
         </el-form-item>
       </el-form>
       <div class="msg">
-        <router-link to="/login" style="margin-right:10px">登录</router-link>
-        <router-link to="/reset" >忘记密码</router-link>
+        <router-link to="/login" style="margin-right: 10px">登录</router-link>
+        <router-link to="/reset">修改密码</router-link>
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
-
 export default {
-  data () {
+  data() {
     return {
       loginForm: {
         name: '',
@@ -58,21 +57,19 @@ export default {
     }
   },
   methods: {
-    handleRegister () {
+    handleRegister() {
       this.$refs.loginForm.validate(valid => {
-        const user = {
-          name: this.loginForm.name,
-          mobile: this.loginForm.mobile,
-          password: this.loginForm.password
-        }
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Register', user).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
-          })
+          this.$store
+            .dispatch('Register', this.loginForm)
+            .then(data => {
+              this.loading = false
+              this.$router.push({ path: this.redirect || '/login' })
+            })
+            .catch(() => {
+              this.loading = false
+            })
         } else {
           console.log('error submit!!')
           return false
@@ -112,11 +109,11 @@ export default {
 }
 
 /* 移除按钮的默认背景色，设置按钮的颜色为渐变色 */
-/* .el-button {
+.el-button {
   background-color: transparent !important;
   background-image: linear-gradient(to right, #a6c1ee, #fbc2eb) !important;
   color: #fff !important;
-} */
+}
 
 /* 如果需要修改链接颜色，可以添加以下样式 */
 .msg a {

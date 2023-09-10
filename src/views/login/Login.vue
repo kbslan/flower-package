@@ -1,99 +1,89 @@
 <template>
   <div class="login-container">
     <el-card class="login-box">
-      <div class="header">Login</div>
+      <div class="header">登录</div>
       <el-form ref="loginForm" :model="loginForm" label-width="0px">
-        <el-form-item prop="username">
-          <el-input v-model="loginForm.username" placeholder="请输入手机号">
+        <el-form-item prop="mobile">
+          <el-input v-model="loginForm.mobile" placeholder="请输入手机号">
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" :show-password="true">
           </el-input>
         </el-form-item>
-        <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;text-align: left">
+        <el-checkbox v-model="loginForm.rememberMe" style="margin: 0 0 25px 0; text-align: left">
           记住我
         </el-checkbox>
-        <el-form-item style="width: 100%;">
-          <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-form-item style="width: 100%">
+          <el-button :loading="loading" size="medium" type="primary" style="width: 100%" @click.native.prevent="handleLogin">
             <span v-if="!loading">登 录</span>
             <span v-else>登 录 中...</span>
           </el-button>
         </el-form-item>
       </el-form>
       <div class="msg">
-        <router-link to="/register" style="margin-right:10px">注册</router-link>
-        <router-link to="/reset" >忘记密码</router-link>
+        <router-link to="/register" style="margin-right: 10px">注册</router-link>
+        <router-link to="/reset">修改密码</router-link>
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
-import Cookies from 'js-cookie'
-import Config from '@/settings'
+import { getMobile, getPassword, getRememberMe } from '@/utils/auth'
 
 export default {
-  data () {
+  data() {
     return {
       loginForm: {
-        username: '',
+        mobile: '',
         password: '',
         rememberMe: false
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message: '账号不能为空' }],
+        mobile: [{ required: true, trigger: 'blur', message: '账号不能为空' }],
         password: [{ required: true, trigger: 'blur', message: '密码不能为空' }]
       },
-      loading: false
+      loading: false,
+      redirect: undefined
     }
   },
-  created () {
-    // this.getCookie()
+  created() {
+    this.getCookie()
+  },
+  watch: {
+    $route: {
+      handler: function (route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
   },
   methods: {
-    getCookie () {
-      const username = Cookies.get('username')
-      let password = Cookies.get('password')
-      const rememberMe = Cookies.get('rememberMe')
-      // 保存cookie里面的加密后的密码
-      this.cookiePass = password === undefined ? '' : password
+    getCookie() {
+      const mobile = getMobile()
+      let password = getPassword()
+      const rememberMe = getRememberMe()
       password = password === undefined ? this.loginForm.password : password
       this.loginForm = {
-        username: username === undefined ? this.loginForm.username : username,
-        password: password,
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
-        code: ''
+        mobile: mobile === undefined ? this.loginForm.mobile : mobile,
+        password: password === undefined ? this.loginForm.password : password,
+        rememberMe: rememberMe === undefined ? this.loginForm.rememberMe : Boolean(rememberMe)
       }
     },
-    handleLogin () {
+    handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        const user = {
-          username: this.loginForm.username,
-          password: this.loginForm.password,
-          rememberMe: this.loginForm.rememberMe,
-          code: this.loginForm.code,
-          uuid: this.loginForm.uuid
-        }
-
         if (valid) {
           this.loading = true
-          if (user.rememberMe) {
-            Cookies.set('username', user.username, { expires: Config.passCookieExpires })
-            Cookies.set('password', user.password, { expires: Config.passCookieExpires })
-            Cookies.set('rememberMe', user.rememberMe, { expires: Config.passCookieExpires })
-          } else {
-            Cookies.remove('username')
-            Cookies.remove('password')
-            Cookies.remove('rememberMe')
-          }
-          this.$store.dispatch('Login', user).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
-            this.getCode()
-          })
+          this.$store
+            .dispatch('Login', this.loginForm)
+            .then(data => {
+              this.loading = false
+              this.$router.push({ path: this.redirect || '/' })
+            })
+            .catch(() => {
+              this.loading = false
+            })
         } else {
           console.log('error submit!!')
           return false
