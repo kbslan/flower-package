@@ -135,16 +135,10 @@ const user = {
             reject(error)
           })
           .finally(() => {
-            commit('SET_USER', '')
-            commit('SET_MOBILE', '')
-            commit('SET_PASSWORD', '')
             commit('SET_TOKEN', '')
             commit('SET_ADMIN', false)
             commit('SET_PERMISSIONS', [])
             removeToken()
-            removeMobile()
-            removePassword()
-            removePermissions()
           })
       })
     }

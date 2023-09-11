@@ -1,22 +1,19 @@
 <template>
   <div class="container">
     <el-form :inline="true" :model="searchForm" ref="searchForm">
-      <el-form-item label="包花人" prop="bagId">
-        <el-select v-model="searchForm.bagId" placeholder="请选择" filterable clearable>
-          <el-option label="兰超" :value="1"> </el-option>
-          <el-option label="尚志强" :value="2"> </el-option>
+      <el-form-item label="包花人" prop="packageId">
+        <el-select v-model="searchForm.packageId" placeholder="请选择包花人" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="采花人" prop="pickerId">
-        <el-select v-model="searchForm.pickerId" placeholder="请选择" filterable clearable>
-          <el-option label="采花人A" :value="1"> </el-option>
-          <el-option label="采花人B" :value="2"> </el-option>
+        <el-select v-model="searchForm.pickerId" placeholder="请选择采花人" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in pickers" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="品种" prop="categoryId">
-        <el-select v-model="searchForm.categoryId" placeholder="请选择" filterable clearable>
-          <el-option label="玫瑰" :value="1"> </el-option>
-          <el-option label="菊花" :value="2"> </el-option>
+        <el-select v-model="searchForm.categoryId" placeholder="请选择品种" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in categorys" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -29,7 +26,7 @@
     </el-row>
     <el-table :data="tableData" height="500px" border style="width: 100%">
       <el-table-column prop="id" label="ID"> </el-table-column>
-      <el-table-column prop="bagId" label="包花人"> </el-table-column>
+      <el-table-column prop="packageId" label="包花人"> </el-table-column>
       <el-table-column prop="pickerId" label="采花人"> </el-table-column>
       <el-table-column prop="categoryId" label="品种"> </el-table-column>
       <el-table-column prop="specificationId" label="规格"></el-table-column>
@@ -44,20 +41,54 @@
 </template>
 
 <script>
-import { createBagFlowerRecord } from '@/views/flower/BagFlowerRecord'
 
 export default {
   name: 'FlowerTab',
   props: {
-    type: {
-      type: String,
-      required: true
+    tab: {
+      type: String, // 数据类型
+      required: true // 是否必需
+    },
+    packages: {
+      type: Array,
+      require: true,
+      validator(value) {
+        return value.length > 0
+      }
+    },
+    pickers: {
+      type: Array,
+      require: true,
+      validator(value) {
+        return value.length > 0
+      }
+    },
+    categorys: {
+      type: Array,
+      require: true,
+      validator(value) {
+        return value.length > 0
+      }
+    },
+    specifications: {
+      type: Array,
+      require: true,
+      validator(value) {
+        return value.length > 0
+      }
+    },
+    damageReasons: {
+      type: Array,
+      require: true,
+      validator(value) {
+        return value.length > 0
+      }
     }
   },
   data() {
     return {
       searchForm: {
-        bagId: '',
+        packageId: '',
         pickerId: '',
         categoryId: '',
         specificationId: '',
@@ -73,12 +104,13 @@ export default {
         total: 0
       },
       tableData: []
+
     }
   },
+  created() {
+
+  },
   methods: {
-    handleClick(tab) {
-      this.tab = tab.name
-    },
     handleSizeChange(val) {
       this.searchForm.size = val
       this.handleSearch()
@@ -98,127 +130,8 @@ export default {
           damageReasonId: 'xxx',
           bagAmount: 10,
           damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
-        },
-        {
-          id: 1,
-          bagId: '兰超',
-          pickerId: '尚志强',
-          categoryId: '兰花',
-          specificationId: '5',
-          damageReasonId: 'xxx',
-          bagAmount: 10,
-          damageAmount: 2
         }
+
       ]
     },
 
@@ -228,7 +141,7 @@ export default {
     },
 
     add() {
-      this.$router.push('/flower/flowerAdd')
+      this.$router.push({ path: '/flower/flowerAdd', query: { tab: this.tab } })
     }
   }
 }

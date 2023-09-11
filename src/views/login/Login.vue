@@ -31,6 +31,10 @@
 
 <script>
 import { getMobile, getPassword, getRememberMe } from '@/utils/auth'
+import { optionsList } from '@/api/options'
+import localStorageManager from '@/utils/localFlowerRecord'
+import Config from '@/settings'
+import { accountList } from '@/api/user'
 
 export default {
   data() {
@@ -53,7 +57,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -78,6 +82,56 @@ export default {
           this.$store
             .dispatch('Login', this.loginForm)
             .then(data => {
+              // 包花人
+              if (data.admin) {
+                accountList({ yn: 1 }).then(data => {
+                  const records = data.records || []
+                  const packages = records.map(item => ({
+                    label: item.name,
+                    value: item.id
+                  }))
+                  localStorageManager.save(Config.PackagesKey, packages)
+                })
+              } else {
+                localStorageManager.save(Config.PackagesKey, [{ lable: data.name, value: data.id }])
+              }
+
+              // 采花人
+              optionsList({ type: 'flower_picker', yn: 1, page: 1, size: 100 }).then(data => {
+                const records = data.records || []
+                const pickers = records.map(item => ({
+                  label: item.label,
+                  value: item.value
+                }))
+                localStorageManager.save(Config.PickersKey, pickers)
+              })
+              // 品种
+              optionsList({ type: 'flower_category', yn: 1, page: 1, size: 100 }).then(data => {
+                const records = data.records || []
+                const categorys = records.map(item => ({
+                  label: item.label,
+                  value: item.value
+                }))
+                localStorageManager.save(Config.CategorysKey, categorys)
+              })
+              // 规格
+              optionsList({ type: 'flower_specification', yn: 1, page: 1, size: 100 }).then(data => {
+                const records = data.records || []
+                const specifications = records.map(item => ({
+                  label: item.label,
+                  value: item.value
+                }))
+                localStorageManager.save(Config.SpecificationsKey, specifications)
+              })
+              // 报损原因
+              optionsList({ type: 'flower_damage_reason', yn: 1, page: 1, size: 100 }).then(data => {
+                const records = data.records || []
+                const damageReasons = records.map(item => ({
+                  label: item.label,
+                  value: item.value
+                }))
+                localStorageManager.save(Config.DamageReasonsKey, damageReasons)
+              })
               this.loading = false
               this.$router.push({ path: this.redirect || '/' })
             })
@@ -100,7 +154,11 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+  /* background-image: linear-gradient(to right, #fbc2eb, #a6c1ee); */
+  background-image: url("~@/assets/images/background-image.jpg"); /* 使用相对路径引用图片 */
+  background-size: cover; /* 背景图尺寸适应容器 */
+  background-repeat: no-repeat; /* 防止背景图重复 */
+  background-attachment: fixed; /* 固定背景图 */
 }
 
 .login-box {

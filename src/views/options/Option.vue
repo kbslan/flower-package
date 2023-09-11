@@ -42,7 +42,8 @@
 </template>
 
 <script>
-import { optionsList, optionsSave, optionsYn } from '@/api/options'
+import { optionsList, optionsYn } from '@/api/options'
+
 export default {
   name: 'Option',
   props: {
@@ -57,7 +58,7 @@ export default {
         label: '',
         type: '',
         yn: '',
-        current: 1,
+        page: 1,
         size: 20
       },
       pagination: {
@@ -91,7 +92,7 @@ export default {
       this.handleSearch()
     },
     handleCurrentChange(val) {
-      this.searchForm.current = val
+      this.searchForm.page = val
       this.handleSearch()
     },
     handleSearch() {

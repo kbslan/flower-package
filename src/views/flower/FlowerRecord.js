@@ -1,7 +1,7 @@
-export function createBagFlowerRecord(flower) {
-  return new BagFlowerRecord({
+export default function createFlowerRecord(flower) {
+  return new FlowerRecord({
     id: flower.id,
-    bagId: flower.bagId,
+    packageId: flower.packageId,
     pickerId: flower.pickerId,
     categoryId: flower.categoryId,
     specificationId: flower.specificationId,
@@ -18,10 +18,10 @@ export function createBagFlowerRecord(flower) {
   })
 }
 
-export default class BagFlowerRecord {
-  constructor({ id, bagId, pickerId, categoryId, specificationId, damageReasonId, bagAmount, damageAmount, yn, creatorId, creatorName, created }) {
+class FlowerRecord {
+  constructor({ id, packageId, pickerId, categoryId, specificationId, damageReasonId, bagAmount, damageAmount, yn, creatorId, creatorName, created }) {
     this.id = id
-    this.bagId = bagId
+    this.packageId = packageId
     this.pickerId = pickerId
     this.categoryId = categoryId
     this.specificationId = specificationId

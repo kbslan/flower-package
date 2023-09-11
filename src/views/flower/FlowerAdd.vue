@@ -1,32 +1,36 @@
 <template>
   <div class="container">
     <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="包花人" prop="bagId">
-        <el-select v-model="form.bagId" placeholder="请选择" filterable clearable>
-          <el-option label="兰超" :value="1"> </el-option>
-          <el-option label="尚志强" :value="2"> </el-option>
+      <el-form-item label="包花人" prop="packageId">
+        <el-select v-model="form.packageId" placeholder="请选择包花人" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="采花人" prop="pickerId">
-        <el-select v-model="form.pickerId" placeholder="请选择" filterable clearable>
-          <el-option label="兰超" :value="1"> </el-option>
-          <el-option label="尚志强" :value="2"> </el-option>
+        <el-select v-model="form.pickerId" placeholder="请选择采花人" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in pickers" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="品种" prop="categoryId">
-        <el-select v-model="form.categoryId" placeholder="请选择" filterable clearable>
-          <el-option label="兰超" :value="1"> </el-option>
-          <el-option label="尚志强" :value="2"> </el-option>
+        <el-select v-model="form.categoryId" placeholder="请选择品种" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in categorys" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="规格" prop="specificationId">
-        <el-select v-model="form.specificationId" placeholder="请选择" filterable clearable>
-          <el-option label="兰超" :value="1"> </el-option>
-          <el-option label="尚志强" :value="2"> </el-option>
+        <el-select v-model="form.specificationId" placeholder="请选择品种" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in specifications" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="包花数量" prop="bagAmount">
-        <el-input-number v-model="form.bagAmount" :min="1" :precision="0"></el-input-number>
+      <el-form-item label="包花数量" prop="packageAmount">
+        <el-input-number v-model="form.packageAmount" :min="1" :precision="0"></el-input-number>
+      </el-form-item>
+      <el-form-item label="报损原因" prop="damageReasonId">
+        <el-select v-model="form.damageReasonId" placeholder="请选择报损原因" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in damageReasons" :key="item.value"> </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="报损数量" prop="damageAmount">
+        <el-input-number v-model="form.damageAmount" :min="0" :precision="0"></el-input-number>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -37,30 +41,50 @@
 </template>
 
 <script>
-import webStorage from '@/utils/localStoreage'
+import localStorageManager from '@/utils/localFlowerRecord'
+import Config from '@/settings'
+import createFlowerRecord from '@/views/flower/FlowerRecord'
 
 export default {
   name: 'FlowerAdd',
+  created() {
+    this.packages = localStorageManager.queryAll(Config.PackagesKey)
+    this.pickers = localStorageManager.queryAll(Config.PickersKey)
+    this.categorys = localStorageManager.queryAll(Config.CategorysKey)
+    this.specifications = localStorageManager.queryAll(Config.SpecificationsKey)
+    this.damageReasons = localStorageManager.queryAll(Config.DamageReasonsKey)
+    this.tab = this.$route.query.tab
+  },
   data() {
     return {
+      tab: '',
+      userId: '',
+      username: '',
       form: {
-        bagId: '',
+        packageId: '',
         pickerId: '',
         categoryId: '',
         specificationId: '',
-        bagAmount: undefined
+        packageAmount: 1,
+        damageReasonId: undefined,
+        damageAmount: 0
       },
       rules: {
-        bagId: [{ required: true, message: '请选择包花人', trigger: 'change' }],
-        pickerId: [{ required: true, message: '请选择采花人', trigger: 'change' }],
-        categoryId: [{ required: true, message: '请选择品种', trigger: 'change' }],
-        specificationId: [{ required: true, message: '请选择规格', trigger: 'change' }],
-        bagAmount: [{ required: true, message: '请输入包花数量', trigger: 'change' }]
+        packageId: [{ required: true, message: '请选择包花人', trigger: 'blur' }],
+        pickerId: [{ required: true, message: '请选择采花人', trigger: 'blur' }],
+        categoryId: [{ required: true, message: '请选择品种', trigger: 'blur' }],
+        specificationId: [{ required: true, message: '请选择规格', trigger: 'blur' }],
+        packageAmount: [{ required: true, message: '请输入包花数量', trigger: 'blur' }]
       }
     }
   },
   mounted() {
     this.setContent()
+    this.userId = this.$store.state.user.user.id
+    this.username = this.$store.state.user.user.name
+    if (this.tab === 'local') {
+      this.form.packageId = this.userId
+    }
   },
   methods: {
     setContent() {
@@ -70,13 +94,26 @@ export default {
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          webStorage.saveItem('flower', JSON.stringify(this.form))
-          alert('submit!')
+          if (this.tab === 'local') {
+            this.form.yn = 0
+            this.form.creatorId = this.userId
+            this.form.creatorName = this.username
+            this.form.created = new Date()
+            localStorageManager.push(Config.FlowRecordKey + this.userId, createFlowerRecord(this.form))
+            this.resetForm()
+            this.$message.success('本地数据提交成功')
+          } else {
+            this.resetForm()
+            this.$message.success('远端数据提交成功')
+          }
         } else {
-          console.log('error submit!!')
+          this.$message.error('数据提交失败')
           return false
         }
       })
+    },
+    resetForm() {
+      this.$refs.form.resetFields()
     },
     cancel() {
       this.$router.back()

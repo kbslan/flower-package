@@ -5,7 +5,7 @@
         <el-page-header @back="goBack" :content="content" title="返回"></el-page-header>
         <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
           <span class="el-dropdown-link">
-            设置<i class="el-icon-arrow-down el-icon--right" />
+            {{username}}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
             <router-link to="/reset">
@@ -21,7 +21,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
-      <el-main style="margin:0"> <router-view /></el-main>
+      <el-main class="main"> <router-view /></el-main>
     </el-container>
   </div>
 </template>
@@ -31,7 +31,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['content']),
+    ...mapGetters(['content', 'username']),
     title() {
       return this.$route.path === '/' ? '' : '回到首页'
     }
@@ -69,6 +69,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .main {
+    margin:0;
   }
 }
 </style>

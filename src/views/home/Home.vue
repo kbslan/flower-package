@@ -50,10 +50,15 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-image: url("~@/assets/images/background-image.jpg"); /* 使用相对路径引用图片 */
+  // background-image: linear-gradient(to right, #fbc2eb, #a6c1ee); /* 使用相对路径引用图片 */
+  background-size: cover; /* 背景图尺寸适应容器 */
+  background-repeat: no-repeat; /* 防止背景图重复 */
+  background-attachment: fixed; /* 固定背景图 */
 
   .btn {
     margin: 0;
-    margin-top: 20px;
+    margin-top: 50px;
     width: 250px;
   }
 }

@@ -36,6 +36,30 @@ module.exports = {
    */
   PermissionsKey: 'MaLong-Permissions',
   /**
+   * @description 包花人 localStorage key
+   */
+  PackagesKey: 'packages',
+  /**
+   * @description 采花人 localStorage key
+   */
+  PickersKey: 'pickers',
+  /**
+   * @description 品种 localStorage key
+   */
+  CategorysKey: 'categorys',
+  /**
+   * @description 规格 localStorage key
+   */
+  SpecificationsKey: 'specifications',
+  /**
+   * @description 报损原因 localStorage key
+   */
+  DamageReasonsKey: 'damageReasons',
+  /**
+   * @description 包花记录 localStorage key
+   */
+  FlowRecordKey: 'flowerRecord-',
+  /**
    * @description 请求超时时间，毫秒（默认2分钟）
    */
   timeout: 1200000

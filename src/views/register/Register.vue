@@ -50,7 +50,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -86,7 +86,10 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+  background-image: url("~@/assets/images/background-image.jpg"); /* 使用相对路径引用图片 */
+  background-size: cover; /* 背景图尺寸适应容器 */
+  background-repeat: no-repeat; /* 防止背景图重复 */
+  background-attachment: fixed; /* 固定背景图 */
 }
 
 .login-box {
@@ -106,13 +109,6 @@ export default {
 .msg {
   text-align: right;
   line-height: 38px;
-}
-
-/* 移除按钮的默认背景色，设置按钮的颜色为渐变色 */
-.el-button {
-  background-color: transparent !important;
-  background-image: linear-gradient(to right, #a6c1ee, #fbc2eb) !important;
-  color: #fff !important;
 }
 
 /* 如果需要修改链接颜色，可以添加以下样式 */
