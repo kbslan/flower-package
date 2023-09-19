@@ -4,9 +4,6 @@
       <el-form-item label="名称" prop="label">
         <el-input v-model="form.label" style="width:400px"></el-input>
       </el-form-item>
-      <el-form-item label="内容" prop="value">
-        <el-input v-model="form.value" style="width:400px"></el-input>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="cancel">取消</el-button>
@@ -25,15 +22,13 @@ export default {
       form: {
         id: '',
         type: '',
-        label: '',
-        value: ''
+        label: ''
       },
       rules: {
         label: [
           { required: true, message: '请输入名称', trigger: 'blur' },
           { min: 1, max: 150, message: '长度在  到 150 个字符', trigger: 'blur' }
-        ],
-        value: [{ required: true, message: '请输入内容', trigger: 'blur' }]
+        ]
       },
       typeList: [
         {
@@ -67,7 +62,7 @@ export default {
         this.form.id = query.id
         this.form.type = query.type
         this.form.label = query.label
-        this.form.value = query.value
+        this.form.value = query.label
         this.typeList.some(item => {
           if (item.value === this.form.type) {
             subTitle = item.label

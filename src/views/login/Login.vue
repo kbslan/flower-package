@@ -101,7 +101,7 @@ export default {
                 const records = data.records || []
                 const pickers = records.map(item => ({
                   label: item.label,
-                  value: item.value
+                  value: item.id
                 }))
                 localStorageManager.save(Config.PickersKey, pickers)
               })
@@ -110,7 +110,7 @@ export default {
                 const records = data.records || []
                 const categorys = records.map(item => ({
                   label: item.label,
-                  value: item.value
+                  value: item.id
                 }))
                 localStorageManager.save(Config.CategorysKey, categorys)
               })
@@ -119,7 +119,7 @@ export default {
                 const records = data.records || []
                 const specifications = records.map(item => ({
                   label: item.label,
-                  value: item.value
+                  value: item.id
                 }))
                 localStorageManager.save(Config.SpecificationsKey, specifications)
               })
@@ -128,7 +128,7 @@ export default {
                 const records = data.records || []
                 const damageReasons = records.map(item => ({
                   label: item.label,
-                  value: item.value
+                  value: item.id
                 }))
                 localStorageManager.save(Config.DamageReasonsKey, damageReasons)
               })

@@ -6,7 +6,7 @@ export default function createFlowerRecord(flower) {
     categoryId: flower.categoryId,
     specificationId: flower.specificationId,
     damageReasonId: flower.damageReasonId,
-    bagAmount: flower.bagAmount,
+    packageAmount: flower.packageAmount,
     damageAmount: flower.damageAmount,
     yn: flower.yn,
     creatorId: flower.creatorId,
@@ -19,14 +19,14 @@ export default function createFlowerRecord(flower) {
 }
 
 class FlowerRecord {
-  constructor({ id, packageId, pickerId, categoryId, specificationId, damageReasonId, bagAmount, damageAmount, yn, creatorId, creatorName, created }) {
+  constructor({ id, packageId, pickerId, categoryId, specificationId, damageReasonId, packageAmount, damageAmount, yn, creatorId, creatorName, created }) {
     this.id = id
     this.packageId = packageId
     this.pickerId = pickerId
     this.categoryId = categoryId
     this.specificationId = specificationId
     this.damageReasonId = damageReasonId
-    this.bagAmount = bagAmount
+    this.packageAmount = packageAmount
     this.damageAmount = damageAmount
     this.yn = yn
     this.creatorId = creatorId

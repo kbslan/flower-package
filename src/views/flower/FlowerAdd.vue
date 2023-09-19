@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="包花人" prop="packageId">
+      <el-form-item label="包花人">
         <el-select v-model="form.packageId" placeholder="请选择包花人" filterable clearable>
           <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
         </el-select>
@@ -95,11 +95,12 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           if (this.tab === 'local') {
+            this.form.id = localStorageManager.nextSeq(Config.NextSeqKey + this.userId)
             this.form.yn = 0
             this.form.creatorId = this.userId
             this.form.creatorName = this.username
             this.form.created = new Date()
-            localStorageManager.push(Config.FlowRecordKey + this.userId, createFlowerRecord(this.form))
+            localStorageManager.unshift(Config.FlowRecordKey + this.userId, createFlowerRecord(this.form))
             this.resetForm()
             this.$message.success('本地数据提交成功')
           } else {

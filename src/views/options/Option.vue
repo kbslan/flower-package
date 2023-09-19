@@ -20,7 +20,6 @@
     <el-table :data="tableData" height="500px" border style="width: 100%">
       <el-table-column prop="id" label="ID"> </el-table-column>
       <el-table-column prop="label" label="名称"> </el-table-column>
-      <el-table-column prop="value" label="value"> </el-table-column>
       <el-table-column prop="yn" label="状态">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.yn" name="yn" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="changeYnSwitch(scope.row)" />

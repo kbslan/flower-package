@@ -8,11 +8,11 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'Admin' // page title
 
-const port = 8081 // dev port
+const port = 8088 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
-  publicPath: '/',
+  publicPath: '',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
@@ -28,7 +28,7 @@ module.exports = {
     },
     proxy: {
       '/': {
-        target: 'http://localhost:8088', // 后端服务器的地址
+        target: 'http://localhost:8099', // 后端服务器的地址
         ws: false, // 关闭websocket
         changeOrigin: true // 允许跨域
       }
