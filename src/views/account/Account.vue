@@ -50,12 +50,20 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination
+      :total="pagination.total"
+      :current-page="pagination.page"
+      :page-sizes="[10, 20, 50, 100, 200]"
+      :page-size="pagination.size"
+      style="margin-top: 8px;"
+      layout="prev, pager, next, total, sizes"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange">
     </el-pagination>
 
     <el-dialog title="注册" :visible.sync="dialogFormVisible">
       <el-form ref="registForm" :model="registForm" label-width="0px" :rules="registRules">
-        <el-form-item prop="username">
+        <el-form-item prop="name">
           <el-input v-model="registForm.name" placeholder="请输入用户名">
           </el-input>
         </el-form-item>
@@ -95,13 +103,13 @@ export default {
         yn: '',
         admin: '',
         page: 1,
-        size: 20
+        size: 10
       },
       pagination: {
         // 页码
         page: 1,
         // 每页数据条数
-        size: 20,
+        size: 10,
         // 总数据条数
         total: 0
       },
@@ -217,8 +225,12 @@ export default {
               this.loading = false
               this.dialogFormVisible = false
               if (data) {
+                this.$refs.registForm.resetFields()
                 this.handleSearch()
               }
+            })
+            .catch(() => {
+              this.loading = false
             })
         } else {
           console.log('error submit!!')

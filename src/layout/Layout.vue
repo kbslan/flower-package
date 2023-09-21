@@ -73,12 +73,13 @@ export default {
 .container {
   .header {
     font-size: 16px;
+    height: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .main {
-    margin:0;
+    padding: 10px 10px;
   }
 }
 </style>

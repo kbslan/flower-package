@@ -3,7 +3,7 @@
     <el-card class="login-box">
       <div class="header">注册</div>
       <el-form ref="loginForm" :model="loginForm" label-width="0px" :rules="loginRules">
-        <el-form-item prop="username">
+        <el-form-item prop="name">
           <el-input v-model="loginForm.name" placeholder="请输入用户名">
           </el-input>
         </el-form-item>

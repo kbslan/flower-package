@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container1">
     <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="dashboard">数据看板</el-button>
     <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="audit">审核管理</el-button>
     <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="account">账号管理</el-button>
@@ -47,8 +47,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.container {
-  height: 100vh;
+.container1 {
+  // height: 100vh;
+  height: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,7 +62,7 @@ export default {
 
   .btn {
     margin: 0;
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 18px; /* 放大字体 */
     width: 250px;
     padding: 20px 20px; /* 放大按钮尺寸，根据需要调整 */
