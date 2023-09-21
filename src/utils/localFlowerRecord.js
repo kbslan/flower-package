@@ -25,8 +25,22 @@ function unshift(key, newRecord) {
 }
 
 // 4. 分页查询数据
-function queryPage(key, pageNumber, pageSize) {
-  const records = queryAll(key)
+function queryPage(key, pageNumber, pageSize, filter) {
+  let records = queryAll(key)
+  if (filter) {
+    // 使用 filter 方法进行过滤
+    records = records.filter(item => {
+      // 使用逻辑运算符 && 来组合多个条件
+      // 如果查询条件为空（null 或 undefined），则跳过该属性的过滤
+      return (
+        (filter.packageId === null || filter.packageId === '' || item.packageId === filter.packageId) &&
+        (filter.pickerId === null || filter.pickerId === '' || item.pickerId === filter.pickerId) &&
+        (filter.categoryId === null || filter.categoryId === '' || item.categoryId === filter.categoryId) &&
+        (filter.specificationId === null || filter.specificationId === '' || item.specificationId === filter.specificationId) &&
+        (filter.damageReasonId === null || filter.damageReasonId === '' || item.damageReasonId === filter.damageReasonId)
+      )
+    })
+  }
   const startIndex = (pageNumber - 1) * pageSize
   const endIndex = startIndex + pageSize
   const pageRecords = records.slice(startIndex, endIndex)

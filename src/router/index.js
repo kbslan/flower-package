@@ -48,11 +48,33 @@ const routes = [
   },
   {
     path: '/dashboard',
-    component: () => import('@/views/dashboard/Dashboard.vue'),
-    meta: {
-      title: '数据看板',
-      permission: ['admin']
-    }
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'account',
+        component: () => import('@/views/dashboard/Dashboard.vue'),
+        meta: {
+          title: '数据看板',
+          permission: ['admin']
+        }
+      }
+    ]
+  },
+  {
+    path: '/audit',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'account',
+        component: () => import('@/views/audit/Audit.vue'),
+        meta: {
+          title: '审核管理',
+          permission: ['admin']
+        }
+      }
+    ]
   },
   {
     path: '/flower',
@@ -72,7 +94,7 @@ const routes = [
         name: 'flowerAdd',
         component: () => import('@/views/flower/FlowerAdd.vue'),
         meta: {
-          title: '新增包花记录',
+          title: '包花记录',
           permission: ['normal', 'admin']
         }
       }
@@ -116,10 +138,16 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '*',
+    component: () => import('@/views/login/Login.vue')
   }
 ]
 
 const router = new VueRouter({
+  mode: 'hash',
+  scrollBehavior: () => ({ y: 0 }),
   routes
 })
 

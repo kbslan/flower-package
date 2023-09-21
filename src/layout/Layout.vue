@@ -8,6 +8,11 @@
             {{username}}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
+            <span style="display:block;" @click="logout">
+              <el-dropdown-item>
+                刷新缓存
+              </el-dropdown-item>
+            </span>
             <router-link to="/reset">
               <el-dropdown-item>
                 修改密码
@@ -21,7 +26,9 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
-      <el-main class="main"> <router-view /></el-main>
+      <el-main class="main">
+        <router-view />
+      </el-main>
     </el-container>
   </div>
 </template>

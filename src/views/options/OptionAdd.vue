@@ -68,6 +68,7 @@ export default {
             subTitle = item.label
             return true
           }
+          return false
         })
       }
       if (this.form.id) {

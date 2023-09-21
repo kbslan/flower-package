@@ -1,4 +1,4 @@
-import { constantRouterMap } from '@/router'
+// import { constantRouterMap } from '@/router'
 import Layout from '@/layout/Layout.vue'
 
 const permission = {
@@ -9,7 +9,8 @@ const permission = {
   mutations: {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
-      state.routers = constantRouterMap.concat(routers)
+      // state.routers = constantRouterMap.concat(routers)
+      state.routers = []
     }
   },
   actions: {

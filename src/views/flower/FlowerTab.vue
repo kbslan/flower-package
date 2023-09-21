@@ -16,11 +16,23 @@
           <el-option :label="item.label" :value="item.value" v-for="item in categorys" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="规格" prop="specificationId">
+        <el-select v-model="searchForm.specificationId" placeholder="请选择规格" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in specifications" :key="item.value"> </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="报损原因" prop="damageReasonId">
+        <el-select v-model="searchForm.damageReasonId" placeholder="请选择报损原因" filterable clearable>
+          <el-option :label="item.label" :value="item.value" v-for="item in damageReasons" :key="item.value"> </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleSearch">查询</el-button>
-        <el-button @click="reset">重置</el-button>
-        <el-button type="primary" @click="add">新增包花记录</el-button>
-      <el-button type="primary" @click="submitLocal" v-if="tab==='local'">提交本地数据</el-button>
+        <el-button type="primary" @click="handleSearch" size="medium">查询</el-button>
+        <el-button @click="reset" size="medium">重置</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="add" size="medium">新增包花记录</el-button>
+        <el-button type="primary" @click="submitLocal" v-if="tab==='local'" size="medium">提交本地数据</el-button>
       </el-form-item>
     </el-form>
 
@@ -30,9 +42,15 @@
       <el-table-column prop="pickerId" label="采花人" :formatter="formatPicker"> </el-table-column>
       <el-table-column prop="categoryId" label="品种" :formatter="formatCategory"> </el-table-column>
       <el-table-column prop="specificationId" label="规格" :formatter="formatSpecification"></el-table-column>
-      <el-table-column prop="damageReasonId" label="损坏原因" :formatter="formatDamageReason"></el-table-column>
       <el-table-column prop="packageAmount" label="包花数量"> </el-table-column>
       <el-table-column prop="damageAmount" label="报损数量"></el-table-column>
+      <el-table-column prop="damageReasonId" label="损坏原因" :formatter="formatDamageReason"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button type="text" size="medium" @click="handleDelete(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
@@ -95,6 +113,7 @@ export default {
         pickerId: '',
         categoryId: '',
         specificationId: '',
+        damageReasonId: '',
         page: 1,
         size: 10
       },
@@ -127,7 +146,7 @@ export default {
     handleSearch() {
       if (this.tab === 'local') {
         const key = Config.FlowRecordKey + this.userId
-        this.tableData = localStorageManager.queryPage(key, this.searchForm.page, this.searchForm.size)
+        this.tableData = localStorageManager.queryPage(key, this.searchForm.page, this.searchForm.size, this.searchForm)
         this.pagination.total = localStorageManager.count(key)
       } else {
         flowerList(this.searchForm).then(data => {
@@ -146,7 +165,6 @@ export default {
       this.$router.push({ path: '/flower/flowerAdd', query: { tab: this.tab } })
     },
     submitLocal() {
-      console.log('本地数据提交')
       const records = localStorageManager.queryAll(Config.FlowRecordKey + this.userId)
       if (!records || records.length === 0) {
         this.$message.error('没有数据可以提交')
@@ -154,7 +172,6 @@ export default {
       }
       records.map(it => delete it.id)
       flowerBatchSave(records).then(data => {
-        debugger
         if (data) {
           localStorageManager.clear(Config.FlowRecordKey + this.userId)
           localStorageManager.clear(Config.NextSeqKey + this.userId)
@@ -172,6 +189,7 @@ export default {
           result = item.label
           return true
         }
+        return false
       })
       return result
     },
@@ -182,6 +200,7 @@ export default {
           result = item.label
           return true
         }
+        return false
       })
       return result
     },
@@ -192,6 +211,7 @@ export default {
           result = item.label
           return true
         }
+        return false
       })
       return result
     },
@@ -202,6 +222,7 @@ export default {
           result = item.label
           return true
         }
+        return false
       })
       return result
     },
@@ -212,8 +233,31 @@ export default {
           result = item.label
           return true
         }
+        return false
       })
       return result
+    },
+    handleEdit(row) {
+      this.$router.push({ path: '/flower/flowerAdd', query: { tab: this.tab, flower: row } })
+    },
+    handleDelete(row) {
+      if (this.tab === 'local') {
+        const key = Config.FlowRecordKey + this.userId
+        const allRecords = localStorageManager.queryAll(key)
+        allRecords.forEach((val, i) => {
+          if (val.id === row.id) {
+            // 删除
+            allRecords.splice(i, 1)
+          }
+        })
+        localStorageManager.save(key, allRecords)
+        this.handleSearch()
+      } else {
+        flowerList(this.searchForm).then(data => {
+          this.tableData = data.records || []
+          this.pagination.total = data.total
+        })
+      }
     }
   }
 }

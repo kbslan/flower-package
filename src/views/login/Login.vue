@@ -22,7 +22,7 @@
         </el-form-item>
       </el-form>
       <div class="msg">
-        <router-link to="/register" style="margin-right: 10px">注册</router-link>
+        <!-- <router-link to="/register" style="margin-right: 10px">注册</router-link> -->
         <router-link to="/reset">修改密码</router-link>
       </div>
     </el-card>

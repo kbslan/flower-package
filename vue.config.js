@@ -8,17 +8,15 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'Admin' // page title
 
-const port = 8088 // dev port
-
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
-  publicPath: '',
-  outputDir: 'dist',
-  assetsDir: 'static',
+  publicPath: '/flower',
+  // outputDir: 'dist',
+  // assetsDir: '/static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
-    port: port,
+    port: 8088,
     open: true,
     client: {
       overlay: {
@@ -27,10 +25,11 @@ module.exports = {
       }
     },
     proxy: {
-      '/': {
+      '/api': {
         target: 'http://localhost:8099', // 后端服务器的地址
         ws: false, // 关闭websocket
-        changeOrigin: true // 允许跨域
+        // pathRewrite: { '^/api': '' }, // If you don't want /api to be passed along, we need to rewrite the path
+        changeOrigin: true // 允许跨域,
       }
     }
   },

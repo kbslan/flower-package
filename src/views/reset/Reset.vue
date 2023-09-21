@@ -25,14 +25,14 @@
       </el-form>
       <div class="msg">
         <router-link to="/login" style="margin-right: 10px">登录</router-link>
-        <router-link to="/register">注册</router-link>
+        <!-- <router-link to="/register">注册</router-link> -->
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
-import { getMobile, getRememberMe } from '@/utils/auth'
+import { getMobile } from '@/utils/auth'
 
 export default {
   data() {
@@ -123,13 +123,6 @@ export default {
 .msg {
   text-align: right;
   line-height: 38px;
-}
-
-/* 移除按钮的默认背景色，设置按钮的颜色为渐变色 */
-.el-button {
-  background-color: transparent !important;
-  background-image: linear-gradient(to right, #a6c1ee, #fbc2eb) !important;
-  color: #fff !important;
 }
 
 /* 如果需要修改链接颜色，可以添加以下样式 */

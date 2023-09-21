@@ -13,8 +13,8 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSearch">查询</el-button>
-        <el-button @click="handlReset">重置</el-button>
         <el-button type="primary" @click="handlAdd">新增</el-button>
+        <el-button @click="handlReset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="tableData" height="500px" border style="width: 100%">
@@ -29,8 +29,8 @@
       <el-table-column prop="modified" label="更新时间"></el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button type="text" size="medium" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

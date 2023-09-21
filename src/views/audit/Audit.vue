@@ -1,5 +1,5 @@
 <template>
-  <h1>数据看板</h1>
+  <h1>审核管理</h1>
 </template>
 
 <script>

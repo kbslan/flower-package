@@ -25,16 +25,16 @@
         <el-input-number v-model="form.packageAmount" :min="1" :precision="0"></el-input-number>
       </el-form-item>
       <el-form-item label="报损原因" prop="damageReasonId">
-        <el-select v-model="form.damageReasonId" placeholder="请选择报损原因" filterable clearable>
-          <el-option :label="item.label" :value="item.value" v-for="item in damageReasons" :key="item.value"> </el-option>
+        <el-select v-model="form.damageReasonId" placeholder="请选择报损原因" clearable>
+          <el-option v-for="item in damageReasons" :label="item.label" :value="item.value"  :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="报损数量" prop="damageAmount">
         <el-input-number v-model="form.damageAmount" :min="0" :precision="0"></el-input-number>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="cancel">取消</el-button>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -44,6 +44,7 @@
 import localStorageManager from '@/utils/localFlowerRecord'
 import Config from '@/settings'
 import createFlowerRecord from '@/views/flower/FlowerRecord'
+import { flowerSave } from '@/api/flower.js'
 
 export default {
   name: 'FlowerAdd',
@@ -58,6 +59,7 @@ export default {
   data() {
     return {
       tab: '',
+      edit: false,
       userId: '',
       username: '',
       form: {
@@ -67,7 +69,8 @@ export default {
         specificationId: '',
         packageAmount: 1,
         damageReasonId: undefined,
-        damageAmount: 0
+        damageAmount: 0,
+        yn: 0
       },
       rules: {
         packageId: [{ required: true, message: '请选择包花人', trigger: 'blur' }],
@@ -79,33 +82,72 @@ export default {
     }
   },
   mounted() {
-    this.setContent()
     this.userId = this.$store.state.user.user.id
     this.username = this.$store.state.user.user.name
     if (this.tab === 'local') {
       this.form.packageId = this.userId
     }
+    const query = this.$route.query
+    const title = this.$route.meta.title
+    if (query && query.flower) {
+      this.edit = true
+      this.$store.dispatch('SetContent', '编辑' + title)
+      this.form.id = query.flower.id
+      this.form.packageId = query.flower.packageId
+      this.form.pickerId = query.flower.pickerId
+      this.form.categoryId = query.flower.categoryId
+      this.form.specificationId = query.flower.specificationId
+      this.form.packageAmount = query.flower.packageAmount
+      this.form.damageReasonId = query.flower.damageReasonId
+      this.form.damageAmount = query.flower.damageAmount
+      this.form.yn = query.flower.yn
+    } else {
+      this.$store.dispatch('SetContent', '新增' + title)
+    }
   },
   methods: {
-    setContent() {
-      const title = this.$route.meta.title
-      this.$store.dispatch('SetContent', title)
-    },
+
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          if (this.form.damageAmount && this.form.damageAmount > 0 && !this.form.damageReasonId) {
+            this.$message.error('请选择报损原因')
+            return
+          }
           if (this.tab === 'local') {
-            this.form.id = localStorageManager.nextSeq(Config.NextSeqKey + this.userId)
-            this.form.yn = 0
-            this.form.creatorId = this.userId
-            this.form.creatorName = this.username
-            this.form.created = new Date()
-            localStorageManager.unshift(Config.FlowRecordKey + this.userId, createFlowerRecord(this.form))
-            this.resetForm()
-            this.$message.success('本地数据提交成功')
+            if (this.edit) {
+              const key = Config.FlowRecordKey + this.userId
+              const allRecords = localStorageManager.queryAll(key)
+              allRecords.forEach((val, i) => {
+                if (val.id === this.form.id) {
+                  this.form.created = new Date()
+                  // 替换并删除——起始位置，要删除的项的个数，要插入的内容（要插入的项的个数不必等于删除的项的个数）
+                  allRecords.splice(i, 1, this.form)
+                }
+              })
+              localStorageManager.save(key, allRecords)
+              this.resetForm()
+              this.$message.success('数据修改成功')
+              this.cancel()
+            } else {
+              this.form.id = localStorageManager.nextSeq(Config.NextSeqKey + this.userId)
+              this.form.yn = 0
+              this.form.creatorId = this.userId
+              this.form.creatorName = this.username
+              this.form.created = new Date()
+              localStorageManager.unshift(Config.FlowRecordKey + this.userId, createFlowerRecord(this.form))
+              this.resetForm()
+              this.$message.success('本地数据提交成功')
+            }
           } else {
-            this.resetForm()
-            this.$message.success('远端数据提交成功')
+            flowerSave(this.form).then((data) => {
+              if (data) {
+                this.$message.success('远端数据提交成功')
+                this.cancel()
+              } else {
+                this.$message.success('远端数据提交失败')
+              }
+            })
           }
         } else {
           this.$message.error('数据提交失败')

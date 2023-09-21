@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="dashboard">数据看板</el-button>
-    <el-button class="btn" type="primary" v-if="permissions.includes('admin')">PDA管理</el-button>
-    <el-button class="btn" type="primary" v-if="permissions.includes('normal')" @click="flower">包花提报</el-button>
-    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="options">配置项管理</el-button>
+    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="audit">审核管理</el-button>
     <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="account">账号管理</el-button>
+    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="options">配置项管理</el-button>
+    <el-button class="btn" type="primary" v-if="permissions.includes('normal')" @click="flower">包花提报</el-button>
   </div>
 </template>
 
@@ -38,6 +38,9 @@ export default {
     },
     options() {
       this.$router.push('/options')
+    },
+    audit() {
+      this.$router.push('/audit')
     }
   }
 }
@@ -58,8 +61,10 @@ export default {
 
   .btn {
     margin: 0;
-    margin-top: 50px;
+    margin-top: 30px;
+    font-size: 18px; /* 放大字体 */
     width: 250px;
+    padding: 20px 20px; /* 放大按钮尺寸，根据需要调整 */
   }
 }
 </style>

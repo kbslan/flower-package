@@ -1,4 +1,4 @@
-import { register, login, logout, passwordReset, getInfo } from '@/api/user'
+import { register, login, logout, passwordReset, accountInfo } from '@/api/user'
 import { getToken, setToken, removeToken, getMobile, setMobile, removeMobile, getPassword, setPassword, removePassword, getRememberMe, setRememberMe, removeRememberMe, getPermissions, setPermissions, removePermissions } from '@/utils/auth'
 
 const user = {
@@ -114,7 +114,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo()
+        accountInfo()
           .then((data) => {
             commit('SET_USER', data)
             resolve(data)
