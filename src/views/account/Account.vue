@@ -50,15 +50,7 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination
-      :total="pagination.total"
-      :current-page="pagination.page"
-      :page-sizes="[10, 20, 50, 100, 200]"
-      :page-size="pagination.size"
-      style="margin-top: 8px;"
-      layout="prev, pager, next, total, sizes"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange">
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[10, 20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
 
     <el-dialog title="注册" :visible.sync="dialogFormVisible">
@@ -79,10 +71,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button :loading="loading" size="medium" type="primary"  @click.native.prevent="handleRegister">
-            <span v-if="!loading">注 册</span>
-            <span v-else>注 册 中...</span>
-          </el-button>
+        <el-button :loading="loading" size="medium" type="primary" @click.native.prevent="handleRegister">
+          <span v-if="!loading">注 册</span>
+          <span v-else>注 册 中...</span>
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -90,7 +82,7 @@
 </template>
 
 <script>
-import { accountList, accountYn, accountAdmin, accountDel, register } from '@/api/user'
+import { accountPage, accountYn, accountAdmin, accountDel, register } from '@/api/user'
 
 export default {
   name: 'Account',
@@ -169,7 +161,7 @@ export default {
       this.handleSearch()
     },
     handleSearch() {
-      accountList(this.searchForm).then(data => {
+      accountPage(this.searchForm).then(data => {
         this.tableData = data.records || []
         this.pagination.total = data.total
       })
@@ -181,7 +173,7 @@ export default {
     },
 
     del(id) {
-      accountDel({ id: id }).then((data) => {
+      accountDel({ id: id }).then(data => {
         if (data) {
           this.$message.success('删除成功')
         } else {
@@ -221,7 +213,7 @@ export default {
         if (valid) {
           this.loading = true
           register(this.registForm)
-            .then((data) => {
+            .then(data => {
               this.loading = false
               this.dialogFormVisible = false
               if (data) {
@@ -244,11 +236,11 @@ export default {
 
 <style lang="less" scoped>
 .btn {
-    // margin: 0;
-    // margin-top: 10px;
-    // margin-right: 10px;
-    // font-size: 12px; /* 放大字体 */
-    // width: 120px;
-    // padding: 20px 20px; /* 放大按钮尺寸，根据需要调整 */
-  }
+  // margin: 0;
+  // margin-top: 10px;
+  // margin-right: 10px;
+  // font-size: 12px; /* 放大字体 */
+  // width: 120px;
+  // padding: 20px 20px; /* 放大按钮尺寸，根据需要调整 */
+}
 </style>

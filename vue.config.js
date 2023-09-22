@@ -16,7 +16,7 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
-    port: 8088,
+    port: 8081,
     open: true,
     client: {
       overlay: {
@@ -26,7 +26,7 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:8099', // 后端服务器的地址
+        target: 'http://localhost:8080', // 后端服务器的地址
         ws: false, // 关闭websocket
         // pathRewrite: { '^/api': '' }, // If you don't want /api to be passed along, we need to rewrite the path
         changeOrigin: true // 允许跨域,

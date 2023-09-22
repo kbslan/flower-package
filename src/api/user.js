@@ -15,8 +15,8 @@ export const logout = () => request({ url: '/api/user/logout', method: 'GET' })
 export const register = (data) =>
   request({ url: '/api/user/register', method: 'POST', data })
 
-// 账号列表
-export const accountList = (data) => request({ url: '/api/user/page', method: 'POST', data })
+// 账号分页
+export const accountPage = (data) => request({ url: '/api/user/page', method: 'POST', data })
 
 // 状态变更
 export const accountYn = (data) => request({ url: '/api/user/yn', method: 'POST', data })
@@ -29,3 +29,6 @@ export const accountInfo = (params) => request({ url: '/api/user/info', params }
 
 // 账号删除
 export const accountDel = (params) => request({ url: '/api/user/delete', params })
+
+// 账号列表
+export const accountList = (data) => request({ url: '/api/user/list', method: 'POST', data })

@@ -17,5 +17,9 @@ export const flowerBatchSave = (data) =>
   request({ url: '/api/package/flower/record/save/batch', method: 'POST', data })
 
 // 管理员审核
-export const flowerAudit = (data) =>
-  request({ url: '/api/package/flower/record/audit', method: 'POST', data })
+export const flowerAudit = (params) =>
+  request({ url: '/api/package/flower/record/audit', params })
+
+// 管理员评价
+export const flowerRemark = (params) =>
+  request({ url: '/api/package/flower/record/remark', params })

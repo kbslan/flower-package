@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { optionsList, optionsYn } from '@/api/options'
+import { optionsPage, optionsYn } from '@/api/options'
 
 export default {
   name: 'Option',
@@ -95,7 +95,7 @@ export default {
       this.handleSearch()
     },
     handleSearch() {
-      optionsList(this.searchForm).then(data => {
+      optionsPage(this.searchForm).then(data => {
         this.tableData = data.records || []
         this.pagination.total = data.total
       })

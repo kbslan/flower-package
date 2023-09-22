@@ -61,7 +61,7 @@
 <script>
 import localStorageManager from '@/utils/localFlowerRecord'
 import Config from '@/settings'
-import { flowerList, flowerBatchSave } from '@/api/flower'
+import { flowerList, flowerBatchSave, flowerDel } from '@/api/flower'
 
 export default {
   name: 'FlowerTab',
@@ -72,38 +72,23 @@ export default {
     },
     packages: {
       type: Array,
-      require: true,
-      validator(value) {
-        return value.length > 0
-      }
+      require: true
     },
     pickers: {
       type: Array,
-      require: true,
-      validator(value) {
-        return value.length > 0
-      }
+      require: true
     },
     categorys: {
       type: Array,
-      require: true,
-      validator(value) {
-        return value.length > 0
-      }
+      require: true
     },
     specifications: {
       type: Array,
-      require: true,
-      validator(value) {
-        return value.length > 0
-      }
+      require: true
     },
     damageReasons: {
       type: Array,
-      require: true,
-      validator(value) {
-        return value.length > 0
-      }
+      require: true
     }
   },
   data() {
@@ -126,12 +111,14 @@ export default {
         total: 0
       },
       tableData: []
-
     }
   },
   mounted() {
     this.userId = this.$store.state.user.user.id
     this.username = this.$store.state.user.user.name
+    if (this.packages && this.packages.length === 1) {
+      this.searchForm.packageId = this.packages[0].value
+    }
     this.handleSearch()
   },
   methods: {
@@ -253,9 +240,11 @@ export default {
         localStorageManager.save(key, allRecords)
         this.handleSearch()
       } else {
-        flowerList(this.searchForm).then(data => {
-          this.tableData = data.records || []
-          this.pagination.total = data.total
+        flowerDel({ ids: row.id }).then(data => {
+          if (data) {
+            this.$message.success('数据删除成功')
+            this.handleSearch()
+          }
         })
       }
     }
