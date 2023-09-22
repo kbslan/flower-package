@@ -61,7 +61,7 @@ export const createAxiosByinterceptors = (config) => {
         return downloadFile(response)
       } else {
         if (code === Config.successCode) return data
-        else if (code === 401) {
+        else if (code === '1010' || code === '1011' || code === '1012' || code === '1013' || code === '1014') {
           jumpLogin()
         } else {
           Message.error(message)
@@ -74,7 +74,8 @@ export const createAxiosByinterceptors = (config) => {
       const { loading = true } = error.config
       if (loading) cancelLoading()
       if (error.response) {
-        if (error.response.status === 401) {
+        const code = error.response.status
+        if (code === '1010' || code === '1011' || code === '1012' || code === '1013' || code === '1014') {
           jumpLogin()
         }
       }

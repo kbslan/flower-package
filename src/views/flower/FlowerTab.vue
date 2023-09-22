@@ -47,8 +47,12 @@
       <el-table-column prop="damageReasonId" label="损坏原因" :formatter="formatDamageReason"></el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button type="text" size="medium" @click="handleDelete(scope.row)">删除</el-button>
+          <div class="action-buttons">
+            <el-button type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
+              <el-button type="text" slot="reference">删除</el-button>
+            </el-popconfirm>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -255,5 +259,11 @@ export default {
 <style lang="less" scoped>
 .container {
   padding: 20px;
+
+  .action-buttons {
+    display: flex; /* 使用 Flex 布局，将按钮水平排列 */
+    justify-content: space-between; /* 在容器内平均分布按钮 */
+    // width: 150px; /* 调整容器宽度，根据按钮数量和宽度自行调整 */
+  }
 }
 </style>

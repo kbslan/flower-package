@@ -2,7 +2,9 @@ import { Message } from 'element-ui'
 /**
  *   跳转登录
  */
-export const jumpLogin = () => {}
+export const jumpLogin = () => {
+  this.$router.push({ path: '/login' })
+}
 
 /**
  * 下载文件

@@ -2,7 +2,7 @@
 const pageheader = {
   state: {
     // 标题
-    content: '测试标题'
+    content: '马龙包花管理'
   },
 
   mutations: {

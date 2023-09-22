@@ -75,7 +75,9 @@
             <el-button type="text" size="medium" @click="handleAudit(scope.row)" v-if="scope.row.yn === 0">通过</el-button>
             <el-button type="text" size="medium" @click="openDialog(scope.row)">评价</el-button>
             <el-button type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="medium" @click="handleDelete(scope.row)">删除</el-button>
+            <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row)">
+              <el-button type="text" slot="reference">删除</el-button>
+            </el-popconfirm>
           </div>
         </template>
       </el-table-column>

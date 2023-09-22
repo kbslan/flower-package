@@ -45,7 +45,9 @@
       <el-table-column prop="modified" label="更新时间"></el-table-column>
       <el-table-column prop="" label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="del(scope.row.id)">删除</el-button>
+          <el-popconfirm title="确定删除吗？" @confirm="del(scope.row.id)">
+            <el-button type="text" slot="reference">删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
