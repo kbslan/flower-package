@@ -18,6 +18,18 @@ module.exports = {
   /**
    * @description token key
    */
+  UserIdKey: 'UserId',
+  /**
+   * @description token key
+   */
+  UserNameKey: 'UserName',
+  /**
+   * @description token key
+   */
+  AdminKey: 'Admin',
+  /**
+   * @description token key
+   */
   TokenKey: 'Authorization',
   /**
    * @description 手机号 cookie key

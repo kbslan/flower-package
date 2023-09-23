@@ -1,5 +1,14 @@
 import { register, login, logout, passwordReset, accountInfo } from '@/api/user'
-import { getToken, setToken, removeToken, getMobile, setMobile, removeMobile, getPassword, setPassword, removePassword, getRememberMe, setRememberMe, removeRememberMe, getPermissions, setPermissions, removePermissions } from '@/utils/auth'
+import {
+  getToken, setToken, removeToken,
+  getMobile, setMobile, removeMobile,
+  getPassword, setPassword, removePassword,
+  getRememberMe, setRememberMe, removeRememberMe,
+  getPermissions, setPermissions, removePermissions,
+  setUserId, removeUserId,
+  setAdmin, removeAdmin,
+  setUserName, removeUserName
+} from '@/utils/auth'
 
 const user = {
   state: {
@@ -69,6 +78,9 @@ const user = {
             commit('SET_REMEMBER_ME', userInfo.rememberMe)
             commit('SET_ADMIN', data.admin)
             commit('SET_PERMISSIONS', data.permissions)
+            setUserId(data.id, userInfo.rememberMe)
+            setUserName(data.name, userInfo.rememberMe)
+            setAdmin(data.admin, userInfo.rememberMe)
             if (userInfo.rememberMe) {
               setMobile(userInfo.mobile, userInfo.rememberMe)
               setPassword(userInfo.password, userInfo.rememberMe)
@@ -138,7 +150,11 @@ const user = {
             commit('SET_TOKEN', '')
             commit('SET_ADMIN', false)
             commit('SET_PERMISSIONS', [])
+            removeUserId()
+            removeUserName()
+            removeAdmin()
             removeToken()
+            removePermissions()
           })
       })
     }

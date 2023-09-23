@@ -22,9 +22,9 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="btn" @click="handleSearch">查询</el-button>
-        <el-button type="primary" class="btn" @click="dialogFormVisible = true">注册</el-button>
-        <el-button @click="reset" class="btn">重置</el-button>
+        <el-button type="primary" @click="handleSearch">查询</el-button>
+        <el-button type="primary" @click="dialogFormVisible = true">注册</el-button>
+        <el-button @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="tableData" height="500px" border style="width: 100%">
@@ -90,11 +90,10 @@ export default {
   name: 'Account',
   data() {
     return {
-      value1: 1,
       searchForm: {
         name: '',
         mobile: '',
-        yn: '',
+        yn: 1,
         admin: '',
         page: 1,
         size: 10
@@ -109,21 +108,21 @@ export default {
       },
       ynList: [
         {
-          value: '1',
+          value: 1,
           label: '启用'
         },
         {
-          value: '0',
+          value: 0,
           label: '禁用'
         }
       ],
       adminList: [
         {
-          value: '1',
+          value: 1,
           label: '是'
         },
         {
-          value: '0',
+          value: 0,
           label: '否'
         }
       ],
@@ -237,12 +236,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.btn {
-  // margin: 0;
-  // margin-top: 10px;
-  // margin-right: 10px;
-  // font-size: 12px; /* 放大字体 */
-  // width: 120px;
-  // padding: 20px 20px; /* 放大按钮尺寸，根据需要调整 */
-}
 </style>

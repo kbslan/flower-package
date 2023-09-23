@@ -1,10 +1,10 @@
 <template>
   <div class="container1">
     <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="dashboard">数据看板</el-button>
-    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="audit">审核管理</el-button>
-    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="account">账号管理</el-button>
-    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="options">配置项管理</el-button>
     <el-button class="btn" type="primary" v-if="permissions.includes('normal')" @click="flower">包花提报</el-button>
+    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="audit">审核管理</el-button>
+    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="options">配置项管理</el-button>
+    <el-button class="btn" type="primary" v-if="permissions.includes('admin')" @click="account">账号管理</el-button>
   </div>
 </template>
 

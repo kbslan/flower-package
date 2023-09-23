@@ -66,6 +66,7 @@
 import localStorageManager from '@/utils/localFlowerRecord'
 import Config from '@/settings'
 import { flowerList, flowerBatchSave, flowerDel } from '@/api/flower'
+import { getUserId, getUserName } from '@/utils/auth'
 
 export default {
   name: 'FlowerTab',
@@ -118,8 +119,8 @@ export default {
     }
   },
   mounted() {
-    this.userId = this.$store.state.user.user.id
-    this.username = this.$store.state.user.user.name
+    this.userId = getUserId()
+    this.username = getUserName()
     if (this.packages && this.packages.length === 1) {
       this.searchForm.packageId = this.packages[0].value
     }

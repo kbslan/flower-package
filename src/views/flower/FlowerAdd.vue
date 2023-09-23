@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item label="报损原因" prop="damageReasonId">
         <el-select v-model="form.damageReasonId" placeholder="请选择报损原因" clearable>
-          <el-option v-for="item in damageReasons" :label="item.label" :value="item.value"  :key="item.value"> </el-option>
+          <el-option v-for="item in damageReasons" :label="item.label" :value="item.value" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="报损数量" prop="damageAmount">
@@ -45,6 +45,7 @@ import localStorageManager from '@/utils/localFlowerRecord'
 import Config from '@/settings'
 import createFlowerRecord from '@/views/flower/FlowerRecord'
 import { flowerSave } from '@/api/flower.js'
+import { getUserId, getUserName } from '@/utils/auth'
 
 export default {
   name: 'FlowerAdd',
@@ -82,8 +83,8 @@ export default {
     }
   },
   mounted() {
-    this.userId = this.$store.state.user.user.id
-    this.username = this.$store.state.user.user.name
+    this.userId = getUserId()
+    this.username = getUserName()
     if (this.tab === 'local') {
       this.form.packageId = this.userId
     }
@@ -106,7 +107,6 @@ export default {
     }
   },
   methods: {
-
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
@@ -140,7 +140,7 @@ export default {
               this.$message.success('本地数据提交成功')
             }
           } else {
-            flowerSave(this.form).then((data) => {
+            flowerSave(this.form).then(data => {
               if (data) {
                 this.$message.success('远端数据提交成功')
                 this.cancel()

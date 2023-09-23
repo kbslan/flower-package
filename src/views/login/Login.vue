@@ -11,20 +11,20 @@
           <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" :show-password="true">
           </el-input>
         </el-form-item>
-        <el-checkbox v-model="loginForm.rememberMe" style="margin: 0 0 25px 0; text-align: left">
-          记住我
-        </el-checkbox>
         <el-form-item style="width: 100%">
           <el-button :loading="loading" size="medium" type="primary" style="width: 100%" @click.native.prevent="handleLogin">
             <span v-if="!loading">登 录</span>
             <span v-else>登 录 中...</span>
           </el-button>
         </el-form-item>
+        <el-form-item class="remenber">
+          <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 20px;text-align: left;">
+            记住我
+          </el-checkbox>
+          <router-link to="/reset" style="margin-left: 110px;margin-right: 10px">修改密码</router-link>
+          <!-- <router-link to="/register">注册</router-link> -->
+        </el-form-item>
       </el-form>
-      <div class="msg">
-        <!-- <router-link to="/register" style="margin-right: 10px">注册</router-link> -->
-        <router-link to="/reset">修改密码</router-link>
-      </div>
     </el-card>
   </div>
 </template>
@@ -65,13 +65,12 @@ export default {
   methods: {
     getCookie() {
       const mobile = getMobile()
-      let password = getPassword()
+      const password = getPassword()
       const rememberMe = getRememberMe()
-      password = password === undefined ? this.loginForm.password : password
       this.loginForm = {
-        mobile: mobile === undefined ? this.loginForm.mobile : mobile,
-        password: password === undefined ? this.loginForm.password : password,
-        rememberMe: rememberMe === undefined ? this.loginForm.rememberMe : Boolean(rememberMe)
+        mobile: mobile === undefined ? '' : mobile,
+        password: password === undefined ? '' : password,
+        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       }
     },
     handleLogin() {
@@ -136,7 +135,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .login-container {
   display: flex;
   justify-content: center;
@@ -155,6 +154,10 @@ export default {
   padding: 20px;
   text-align: center;
   background-color: #fff;
+
+  .remenber {
+    text-align: left;
+  }
 }
 
 .header {
@@ -162,18 +165,6 @@ export default {
   font-weight: bold;
   line-height: 200px;
 }
-
-.msg {
-  text-align: right;
-  line-height: 38px;
-}
-
-/* 移除按钮的默认背景色，设置按钮的颜色为渐变色 */
-/* .el-button {
-  background-color: transparent !important;
-  background-image: linear-gradient(to right, #a6c1ee, #fbc2eb) !important;
-  color: #fff !important;
-} */
 
 /* 如果需要修改链接颜色，可以添加以下样式 */
 .msg a {

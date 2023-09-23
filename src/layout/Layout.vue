@@ -8,11 +8,11 @@
             {{username}}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <span style="display:block;" @click="logout">
+            <!-- <span style="display:block;" @click="logout">
               <el-dropdown-item>
                 刷新缓存
               </el-dropdown-item>
-            </span>
+            </span> -->
             <router-link to="/reset">
               <el-dropdown-item>
                 修改密码
@@ -35,13 +35,24 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getUserId, getUserName } from '@/utils/auth'
 
 export default {
+  data() {
+    return {
+      userid: undefined,
+      username: '未知用户'
+    }
+  },
   computed: {
-    ...mapGetters(['content', 'username']),
+    ...mapGetters(['content']),
     title() {
       return this.$route.path === '/' ? '' : '回到首页'
     }
+  },
+  created() {
+    this.userid = getUserId()
+    this.username = getUserName()
   },
   methods: {
     goBack() {

@@ -56,7 +56,7 @@ export default {
       searchForm: {
         label: '',
         type: '',
-        yn: '',
+        yn: 1,
         page: 1,
         size: 20
       },
@@ -70,11 +70,11 @@ export default {
       },
       ynList: [
         {
-          value: '1',
+          value: 1,
           label: '启用'
         },
         {
-          value: '0',
+          value: 0,
           label: '禁用'
         }
       ],
