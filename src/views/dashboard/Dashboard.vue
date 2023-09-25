@@ -1,74 +1,90 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :span="6">
-        <div>
-          <el-statistic group-separator="," :precision="2" :value="value2" :title="title"></el-statistic>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div>
-          <el-statistic title="男女比">
-            <template slot="formatter">
-              456/2
-            </template>
-          </el-statistic>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div>
-          <el-statistic group-separator="," :precision="2" decimal-separator="." :value="value1" :title="title">
-            <template slot="prefix">
-              <i class="el-icon-s-flag" style="color: red"></i>
-            </template>
-            <template slot="suffix">
-              <i class="el-icon-s-flag" style="color: blue"></i>
-            </template>
-          </el-statistic>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div>
-          <el-statistic :value="like ? 521 : 520" title="Feedback">
-            <template slot="suffix">
-              <span @click="like = !like" class="like">
-                <i class="el-icon-star-on" style="color:red" v-show="!!like"></i>
-                <i class="el-icon-star-off" v-show="!like"></i>
-              </span>
-            </template>
-          </el-statistic>
-        </div>
-      </el-col>
-    </el-row>
+    <div id="echarts-bar" style="width: 100%; height: 400px;"></div>
   </div>
 </template>
 
 <script>
+import * as echarts from 'echarts'
+
 export default {
   data() {
     return {
-      like: true,
-      value1: 4154.564,
-      value2: 1314,
-      title: '增长人数'
+      chartData: {
+        categories: ['洛神', '蜜桃雪山', '粉红雪山', '海洋之谜', '梦境', '王熙凤'],
+        seriesData1: [320, 302, 341, 374, 390, 450],
+        seriesData2: [-120, -132, -101, -134, -190, -230]
+      }
     }
   },
   mounted() {
-    this.setContent()
+    this.renderChart()
   },
   methods: {
-    setContent() {
-      const title = this.$route.meta.title
-      this.$store.dispatch('SetContent', title)
+    renderChart() {
+      const chart = echarts.init(document.getElementById('echarts-bar'))
+      // 在这里粘贴您的图表配置选项
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['报损数量', '包花数量']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        yAxis: [
+          {
+            type: 'category',
+            axisTick: {
+              show: false
+            },
+            data: this.chartData.categories // 使用组件的数据属性
+          }
+        ],
+        series: [
+          {
+            name: '包花数量',
+            type: 'bar',
+            stack: 'Total',
+            label: {
+              show: true
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: this.chartData.seriesData1 // 使用组件的数据属性
+          },
+          {
+            name: '报损数量',
+            type: 'bar',
+            stack: 'Total',
+            label: {
+              show: true,
+              position: 'left'
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: this.chartData.seriesData2 // 使用组件的数据属性
+          }
+        ]
+      }
+
+      chart.setOption(option)
     }
   }
 }
 </script>
-
-<style lang="less" scoped>
-.like {
-  cursor: pointer;
-  font-size: 25px;
-  display: inline-block;
-}
-</style>
