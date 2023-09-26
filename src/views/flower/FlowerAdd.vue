@@ -4,14 +4,14 @@
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
           <el-form-item label="包花人" prop="packageId">
-            <el-select v-model="form.packageId" placeholder="请选择包花人" filterable clearable>
+            <el-select v-model="form.packageId" placeholder="请选择包花人" clearable>
               <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col>
           <el-form-item label="采花人" prop="pickerId">
-            <el-select v-model="form.pickerId" placeholder="请选择采花人" filterable clearable>
+            <el-select v-model="form.pickerId" placeholder="请选择采花人" clearable>
               <el-option :label="item.label" :value="item.value" v-for="item in pickers" :key="item.value"> </el-option>
             </el-select>
           </el-form-item>
@@ -20,14 +20,14 @@
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
           <el-form-item label="品种" prop="categoryId">
-            <el-select v-model="form.categoryId" placeholder="请选择品种" filterable clearable>
+            <el-select v-model="form.categoryId" placeholder="请选择品种" clearable>
               <el-option :label="item.label" :value="item.value" v-for="item in categorys" :key="item.value"> </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col>
           <el-form-item label="规格" prop="specificationId">
-            <el-select v-model="form.specificationId" placeholder="请选择品种" filterable clearable>
+            <el-select v-model="form.specificationId" placeholder="请选择品种" clearable>
               <el-option :label="item.label" :value="item.value" v-for="item in specifications" :key="item.value"> </el-option>
             </el-select>
           </el-form-item>
@@ -171,9 +171,13 @@ export default {
 
               const curPackageId = this.form.packageId
               const curPickerId = this.form.pickerId
+              const curCategoryId = this.form.categoryId
+              const curSpecificationId = this.form.specificationId
               this.resetForm()
               this.form.packageId = curPackageId
               this.form.pickerId = curPickerId
+              this.form.categoryId = curCategoryId
+              this.form.specificationId = curSpecificationId
               this.$message.success('本地数据提交成功')
             }
           } else {

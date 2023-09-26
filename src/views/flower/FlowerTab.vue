@@ -2,27 +2,27 @@
   <div class="container">
     <el-form :inline="true" :model="searchForm" ref="searchForm">
       <el-form-item label="包花人" prop="packageId">
-        <el-select v-model="searchForm.packageId" placeholder="请选择包花人" filterable clearable>
+        <el-select v-model="searchForm.packageId" placeholder="请选择包花人" clearable>
           <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="采花人" prop="pickerId">
-        <el-select v-model="searchForm.pickerId" placeholder="请选择采花人" filterable clearable>
+        <el-select v-model="searchForm.pickerId" placeholder="请选择采花人" clearable>
           <el-option :label="item.label" :value="item.value" v-for="item in pickers" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="品种" prop="categoryId">
-        <el-select v-model="searchForm.categoryId" placeholder="请选择品种" filterable clearable>
+        <el-select v-model="searchForm.categoryId" placeholder="请选择品种" clearable>
           <el-option :label="item.label" :value="item.value" v-for="item in categorys" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="规格" prop="specificationId">
-        <el-select v-model="searchForm.specificationId" placeholder="请选择规格" filterable clearable>
+        <el-select v-model="searchForm.specificationId" placeholder="请选择规格" clearable>
           <el-option :label="item.label" :value="item.value" v-for="item in specifications" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="报损原因" prop="damageReasonId">
-        <el-select v-model="searchForm.damageReasonId" placeholder="请选择报损原因" filterable clearable>
+        <el-select v-model="searchForm.damageReasonId" placeholder="请选择报损原因" clearable>
           <el-option :label="item.label" :value="item.value" v-for="item in damageReasons" :key="item.value"> </el-option>
         </el-select>
       </el-form-item>
