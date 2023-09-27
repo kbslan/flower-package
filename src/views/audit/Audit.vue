@@ -403,4 +403,33 @@ export default {
     // width: 150px; /* 调整容器宽度，根据按钮数量和宽度自行调整 */
   }
 }
+/deep/ .el-button {
+    font-size: 15px; /* 放大字体 */
+    padding: 10px 15px; /* 放大按钮尺寸，根据需要调整 */
+}
+
+/deep/ .el-form-item__label {
+  font-size: 15px;
+  line-height: 15px;
+}
+
+/deep/  .el-form-item__content {
+  font-size: 15px;
+  line-height: 15px;
+}
+
+/deep/ .el-input {
+  font-size: 15px;
+}
+
+.el-select-dropdown__item {
+  font-size: 15px;
+}
+
+/deep/ .el-range-input {
+  font-size: 15px;
+}
+.el-table {
+  font-size: 15px;
+}
 </style>

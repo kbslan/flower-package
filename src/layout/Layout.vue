@@ -47,7 +47,8 @@ export default {
   computed: {
     ...mapGetters(['content']),
     title() {
-      return this.$route.path === '/' ? '' : '回到首页'
+      // return this.$route.path === '/' ? '' : '回到首页'
+      return ''
     }
   },
   created() {
@@ -56,7 +57,7 @@ export default {
   },
   methods: {
     goBack() {
-      if (this.$route.path === '/') return
+      // if (this.$route.path === '/') return
       // this.$router.push('/')
       // 与 router.back() 相同
       // this.$router.go(-1)
@@ -71,6 +72,9 @@ export default {
       })
         .then(() => {
           this.$store.dispatch('Logout').then(() => {
+            setTimeout(function() {
+              location.reload()
+            }, 500)
             this.$router.push({ path: '/login' })
           })
         })

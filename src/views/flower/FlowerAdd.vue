@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+    <el-form ref="form" :model="form" :rules="rules"  label-width="auto">
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
           <el-form-item label="包花人" prop="packageId">
@@ -35,14 +35,14 @@
       </el-row>
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
-            <el-form-item label="包花数量" prop="packageAmount" label-width="100px">
-              <div class="input-with-buttons">
-                <el-button @click="increasePackage(-10)">-10</el-button>
-                <el-button @click="increasePackage(-1)">-1</el-button>
-                <el-input v-model="form.packageAmount" :disabled="true"></el-input>
-                <el-button @click="increasePackage(1)">+1</el-button>
-                <el-button @click="increasePackage(10)">+10</el-button>
-              </div>
+            <el-form-item label="包花数量" prop="packageAmount">
+                <el-input v-model="form.packageAmount" :disabled="true" style="font-size:20px; width: 365px"></el-input>
+                <div class="input-with-buttons">
+                  <el-button @click="increasePackage(-10)">-10</el-button>
+                  <el-button @click="increasePackage(-1)">-1</el-button>
+                  <el-button @click="increasePackage(1)">+1</el-button>
+                  <el-button @click="increasePackage(10)">+10</el-button>
+                </div>
             </el-form-item>
         </el-col>
         <el-col>
@@ -56,11 +56,11 @@
 
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
-            <el-form-item label="报损数量" prop="damageAmount" label-width="100px">
+            <el-form-item label="报损数量" prop="damageAmount">
+              <el-input v-model="form.damageAmount" :disabled="true" style="font-size:20px; width: 365px"></el-input>
               <div class="input-with-buttons">
                 <el-button @click="increaseDamage(-10)">-10</el-button>
                 <el-button @click="increaseDamage(-1)">-1</el-button>
-                <el-input v-model="form.damageAmount" :disabled="true"></el-input>
                 <el-button @click="increaseDamage(1)">+1</el-button>
                 <el-button @click="increaseDamage(10)">+10</el-button>
               </div>
@@ -68,12 +68,14 @@
         </el-col>
         <el-col>
           <el-form-item>
-            <el-button class="btn" @click="cancel">取消</el-button>
-            <el-button class="btn" type="primary" @click="onSubmit">提交</el-button>
+            <el-button @click="cancel">取消</el-button>
+            <el-button type="primary" @click="onSubmit">提交</el-button>
           </el-form-item>
         </el-col>
       </el-row>
+
     </el-form>
+
   </div>
 </template>
 
@@ -227,7 +229,7 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  padding: 30px;
+  padding: 10px;
 
   .row-bg {
     padding: 20px 0;
@@ -238,8 +240,26 @@ export default {
   align-items: center;
 }
 
-.btn {
-    font-size: 25px; /* 放大字体 */
-    padding: 20px 20px; /* 放大按钮尺寸，根据需要调整 */
-  }
+/deep/ .el-button {
+    font-size: 40px; /* 放大字体 */
+    padding: 10px 15px; /* 放大按钮尺寸，根据需要调整 */
+}
+
+/deep/ .el-form-item__label {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+/deep/  .el-form-item__content {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+/deep/ .el-input {
+  font-size: 20px;
+}
+
+.el-select-dropdown__item {
+  font-size: 20px;
+}
 </style>

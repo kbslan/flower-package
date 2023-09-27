@@ -37,7 +37,6 @@ const routes = [
     children: [
       {
         path: '',
-        name: '',
         component: () => import('@/views/home/Home.vue'),
         meta: {
           title: '首页',
@@ -52,7 +51,6 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'account',
         component: () => import('@/views/dashboard/Dashboard.vue'),
         meta: {
           title: '数据看板',
@@ -67,7 +65,6 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'account',
         component: () => import('@/views/audit/Audit.vue'),
         meta: {
           title: '审核管理',
@@ -82,7 +79,6 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'flower',
         component: () => import('@/views/flower/Flower.vue'),
         meta: {
           title: '包花管理',
@@ -91,7 +87,6 @@ const routes = [
       },
       {
         path: 'flowerAdd',
-        name: 'flowerAdd',
         component: () => import('@/views/flower/FlowerAdd.vue'),
         meta: {
           title: '包花记录',
@@ -106,7 +101,6 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'account',
         component: () => import('@/views/account/Account.vue'),
         meta: {
           title: '账号管理',
@@ -121,7 +115,6 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'options',
         component: () => import('@/views/options/Options.vue'),
         meta: {
           title: '配置项管理',
@@ -130,7 +123,6 @@ const routes = [
       },
       {
         path: 'optionsAdd',
-        name: 'optionsAdd',
         component: () => import('@/views/options/OptionAdd.vue'),
         meta: {
           title: '新增配置',
@@ -141,7 +133,7 @@ const routes = [
   },
   {
     path: '*',
-    component: () => import('@/views/login/Login.vue')
+    redirect: '/'
   }
 ]
 

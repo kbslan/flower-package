@@ -1,39 +1,70 @@
 <template>
   <div class="container">
-    <el-form :inline="true" :model="searchForm" ref="searchForm">
-      <el-form-item label="包花人" prop="packageId">
-        <el-select v-model="searchForm.packageId" placeholder="请选择包花人" clearable>
-          <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="采花人" prop="pickerId">
-        <el-select v-model="searchForm.pickerId" placeholder="请选择采花人" clearable>
-          <el-option :label="item.label" :value="item.value" v-for="item in pickers" :key="item.value"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="品种" prop="categoryId">
-        <el-select v-model="searchForm.categoryId" placeholder="请选择品种" clearable>
-          <el-option :label="item.label" :value="item.value" v-for="item in categorys" :key="item.value"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="规格" prop="specificationId">
-        <el-select v-model="searchForm.specificationId" placeholder="请选择规格" clearable>
-          <el-option :label="item.label" :value="item.value" v-for="item in specifications" :key="item.value"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="报损原因" prop="damageReasonId">
-        <el-select v-model="searchForm.damageReasonId" placeholder="请选择报损原因" clearable>
-          <el-option :label="item.label" :value="item.value" v-for="item in damageReasons" :key="item.value"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="handleSearch" size="medium">查询</el-button>
-        <el-button @click="reset" size="medium">重置</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="add" size="medium">新增包花记录</el-button>
-        <el-button type="primary" @click="submitLocal" v-if="tab==='local'" size="medium">提交本地数据</el-button>
-      </el-form-item>
+    <el-form :inline="true" :model="searchForm" ref="searchForm" >
+      <el-row type="flex" justify="space-between" class="row-bg">
+        <el-col>
+          <el-form-item label="包花人" prop="packageId">
+            <el-select v-model="searchForm.packageId" placeholder="请选择包花人" clearable>
+              <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="采花人" prop="pickerId">
+            <el-select v-model="searchForm.pickerId" placeholder="请选择采花人" clearable>
+              <el-option :label="item.label" :value="item.value" v-for="item in pickers" :key="item.value"> </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="space-between" class="row-bg">
+        <el-col>
+          <el-form-item label="品种" prop="categoryId">
+            <el-select v-model="searchForm.categoryId" placeholder="请选择品种" clearable>
+              <el-option :label="item.label" :value="item.value" v-for="item in categorys" :key="item.value"> </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="规格" prop="specificationId">
+            <el-select v-model="searchForm.specificationId" placeholder="请选择规格" clearable>
+              <el-option :label="item.label" :value="item.value" v-for="item in specifications" :key="item.value"> </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="space-between" class="row-bg">
+        <el-col>
+          <el-form-item label="报损原因" prop="damageReasonId">
+            <el-select v-model="searchForm.damageReasonId" placeholder="请选择报损原因" clearable>
+              <el-option :label="item.label" :value="item.value" v-for="item in damageReasons" :key="item.value"> </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="状态" prop="yn">
+            <el-select v-model="searchForm.yn" clearable placeholder="请选择状态">
+              <el-option v-for="item in ynList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="space-between" class="row-bg">
+        <el-col>
+          <el-form-item>
+            <el-button type="primary" @click="handleSearch">查询</el-button>
+            <el-button @click="reset">重置</el-button>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item>
+            <el-button type="primary" @click="add">新增包花记录</el-button>
+            <el-popconfirm title="确定提交吗？" v-if="tab==='local'" @confirm="submitLocal">
+              <el-button type="primary" slot="reference">提交本地数据</el-button>
+            </el-popconfirm>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
 
     <el-table :data="tableData" fixed border  style="width: 100%" :show-summary="true" :summary-method="getSummary">
@@ -42,13 +73,14 @@
       <el-table-column prop="pickerId" label="采花人" :formatter="formatPicker"> </el-table-column>
       <el-table-column prop="categoryId" label="品种" :formatter="formatCategory"> </el-table-column>
       <el-table-column prop="specificationId" label="规格" :formatter="formatSpecification"></el-table-column>
+      <el-table-column prop="yn" label="状态" :formatter="formatYn" min-width='50'></el-table-column>
       <el-table-column prop="packageAmount" label="包花数量"> </el-table-column>
       <el-table-column prop="damageAmount" label="报损数量"></el-table-column>
       <el-table-column prop="damageReasonId" label="损坏原因" :formatter="formatDamageReason"></el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <div class="action-buttons">
-            <el-button type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
               <el-button type="text" slot="reference">删除</el-button>
             </el-popconfirm>
@@ -104,9 +136,20 @@ export default {
         categoryId: '',
         specificationId: '',
         damageReasonId: '',
+        yn: '',
         page: 1,
         size: 10
       },
+      ynList: [
+        {
+          value: 1,
+          label: '通过'
+        },
+        {
+          value: 0,
+          label: '提报'
+        }
+      ],
       pagination: {
         // 页码
         page: 1,
@@ -229,6 +272,17 @@ export default {
       })
       return result
     },
+    formatYn(row) {
+      let result = '-'
+      this.ynList.some(item => {
+        if (item.value === row.yn) {
+          result = item.label
+          return true
+        }
+        return false
+      })
+      return result
+    },
     handleEdit(row) {
       this.$router.push({ path: '/flower/flowerAdd', query: { tab: this.tab, flower: row } })
     },
@@ -278,10 +332,49 @@ export default {
 .container {
   padding: 20px;
 
+  .row-bg {
+    padding: 0 0;
+  }
   .action-buttons {
     display: flex; /* 使用 Flex 布局，将按钮水平排列 */
     justify-content: space-between; /* 在容器内平均分布按钮 */
     // width: 150px; /* 调整容器宽度，根据按钮数量和宽度自行调整 */
   }
+}
+/deep/ .el-button {
+    font-size: 20px; /* 放大字体 */
+    padding: 10px 15px; /* 放大按钮尺寸，根据需要调整 */
+}
+
+/deep/ .el-form-item__label {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+/deep/  .el-form-item__content {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+/deep/ .el-input {
+  font-size: 20px;
+}
+
+.el-select-dropdown__item {
+  font-size: 20px;
+}
+
+.el-tabs__item {
+  font-size: 20px;
+}
+.el-table {
+  font-size: 20px;
+}
+
+.el-popover {
+   font-size: 20px;
+}
+.el-button--mini {
+  font-size: 20px;
 }
 </style>
