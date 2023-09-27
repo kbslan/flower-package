@@ -34,6 +34,7 @@ import { getMobile, getPassword, getRememberMe } from '@/utils/auth'
 import { optionsList } from '@/api/options'
 import localStorageManager from '@/utils/localFlowerRecord'
 import Config from '@/settings'
+import { accountPage } from '@/api/user'
 
 export default {
   data() {
@@ -82,6 +83,15 @@ export default {
             .then(data => {
               // 包花人
               localStorageManager.save(Config.PackagesKey, [{ label: data.name, value: data.id }])
+              if (data.admin) {
+                accountPage({ yn: 1, page: 1, size: 1000 }).then(data => {
+                  const userList = data.records || []
+                  localStorageManager.save(Config.AuditPackagesKey, userList.map(item => ({ label: item.name, value: item.id })))
+                })
+                  .catch(() => {
+                    localStorageManager.save(Config.AuditPackagesKey, [{ label: data.name, value: data.id }])
+                  })
+              }
 
               // 采花人
               optionsList({ type: 'flower_picker', yn: 1 }).then(data => {

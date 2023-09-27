@@ -48,6 +48,10 @@ module.exports = {
    */
   PermissionsKey: 'MaLong-Permissions',
   /**
+   * @description 审核页包花人 localStorage key
+   */
+  AuditPackagesKey: 'auditPackages',
+  /**
    * @description 包花人 localStorage key
    */
   PackagesKey: 'packages',

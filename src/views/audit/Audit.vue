@@ -186,7 +186,8 @@ export default {
       }))
       localStorageManager.save(Config.DamageReasonsKey, damageReasons)
     })
-    this.packages = localStorageManager.queryAll(Config.PackagesKey)
+
+    this.packages = localStorageManager.queryAll(Config.AuditPackagesKey)
     this.pickers = localStorageManager.queryAll(Config.PickersKey)
     this.categorys = localStorageManager.queryAll(Config.CategorysKey)
     this.specifications = localStorageManager.queryAll(Config.SpecificationsKey)
