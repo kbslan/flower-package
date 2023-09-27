@@ -262,4 +262,8 @@ export default {
 .el-select-dropdown__item {
   font-size: 20px;
 }
+
+/deep/ .el-input.is-disabled .el-input__inner {
+  color: red;
+}
 </style>
