@@ -32,7 +32,16 @@
         </el-select>
       </el-form-item>
       <el-form-item label="时间范围" prop="damageReasonId">
-        <el-date-picker v-model="created" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']" size="large" value-format="yyyy-MM-dd HH:mm:ss">
+        <el-date-picker
+            v-model="created"
+            clearable
+            type="datetimerange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :default-time="['00:00:00', '23:59:59']"
+            size="large"
+            value-format="yyyy-MM-dd HH:mm:ss"
+        >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -43,10 +52,11 @@
       <el-form-item>
         <el-button type="primary" @click="exportFlower" size="medium">导出包花记录</el-button>
         <el-button type="primary" @click="exportDamage" size="medium">导出报损记录</el-button>
+        <el-button type="primary" @click="auditAll" size="medium">一键通过</el-button>
       </el-form-item>
     </el-form>
 
-    <el-table :data="tableData" height="400px" border style="width: 100%">
+    <el-table :data="tableData" fixed border  style="width: 100%" :show-summary="true" :summary-method="getSummary" >
       <el-table-column prop="id" label="ID"> </el-table-column>
       <el-table-column prop="packageId" label="包花人" :formatter="formatPackage" min-width='120'> </el-table-column>
       <el-table-column prop="pickerId" label="采花人" :formatter="formatPicker" min-width='120'> </el-table-column>
@@ -57,18 +67,6 @@
       <el-table-column prop="damageAmount" label="报损数量" min-width='80'></el-table-column>
       <el-table-column prop="damageReasonId" label="损坏原因" :formatter="formatDamageReason" min-width='80'></el-table-column>
       <el-table-column prop="remark" label="评价内容" min-width='150'></el-table-column>
-      <!-- <el-table-column fixed="right" label="操作" width="100">
-        <template slot-scope="scope">
-          <div>
-            <el-button type="text" size="medium" @click="handleAudit(scope.row)" v-if="scope.row.yn === 0">通过</el-button>
-            <el-button type="text" size="medium" @click="openDialog(scope.row)">评价</el-button>
-          </div>
-          <div>
-            <el-button type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="medium" @click="handleDelete(scope.row)">删除</el-button>
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <div class="action-buttons">
@@ -83,7 +81,7 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[10, 20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
 
     <el-dialog title="评价" :visible.sync="dialogFormVisible">
@@ -105,7 +103,7 @@
 <script>
 import localStorageManager from '@/utils/localFlowerRecord'
 import Config from '@/settings'
-import { flowerList, flowerDel, flowerAudit, flowerRemark } from '@/api/flower'
+import { flowerList, flowerDel, flowerAudit, flowerRemark, auditAll } from '@/api/flower'
 import { optionsList } from '@/api/options'
 import { exportFlower, exportDamage } from '@/api/exportdata'
 import dayjs from 'dayjs'
@@ -141,7 +139,7 @@ export default {
         // 页码
         page: 1,
         // 每页数据条数
-        size: 20,
+        size: 10,
         // 总数据条数
         total: 0
       },
@@ -217,6 +215,9 @@ export default {
       if (this.created && this.created[0] && this.created[1]) {
         this.searchForm.start = this.created[0]
         this.searchForm.end = this.created[1]
+      } else {
+        this.searchForm.start = null
+        this.searchForm.end = null
       }
       flowerList(this.searchForm)
         .then(data => {
@@ -351,6 +352,42 @@ export default {
         this.searchForm.end = this.created[1]
       }
       exportDamage(this.searchForm)
+    },
+    getSummary({ columns, data }) {
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计'
+          return
+        }
+        if (column.property === 'packageAmount' || column.property === 'damageAmount') {
+          const values = data.map(item => Number(item[column.property]) || 0)
+          const sum = values.reduce((prev, curr) => prev + curr, 0)
+          sums[index] = sum
+        } else {
+          sums[index] = ''
+        }
+      })
+      return sums
+    },
+    auditAll() {
+      if (this.created && this.created[0] && this.created[1]) {
+        this.searchForm.start = this.created[0]
+        this.searchForm.end = this.created[1]
+      } else {
+        this.searchForm.start = null
+        this.searchForm.end = null
+      }
+      auditAll(this.searchForm)
+        .then(data => {
+          if (data) {
+            this.$message.success('审核成功')
+            this.handleSearch()
+          }
+        })
+        .catch(() => {
+          this.$message.error('一键通过失败')
+        })
     }
   }
 }

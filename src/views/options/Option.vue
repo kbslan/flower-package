@@ -35,7 +35,7 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[10, 20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
   </div>
 </template>
@@ -58,13 +58,13 @@ export default {
         type: '',
         yn: 1,
         page: 1,
-        size: 20
+        size: 10
       },
       pagination: {
         // 页码
         page: 1,
         // 每页数据条数
-        size: 20,
+        size: 10,
         // 总数据条数
         total: 0
       },

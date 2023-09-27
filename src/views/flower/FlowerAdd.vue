@@ -33,12 +33,17 @@
           </el-form-item>
         </el-col>
       </el-row>
-
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
-          <el-form-item label="包花数量" prop="packageAmount">
-            <el-input-number v-model="form.packageAmount" :min="1" :precision="0"></el-input-number>
-          </el-form-item>
+            <el-form-item label="包花数量" prop="packageAmount" label-width="100px">
+              <div class="input-with-buttons">
+                <el-button @click="increasePackage(-10)">-10</el-button>
+                <el-button @click="increasePackage(-1)">-1</el-button>
+                <el-input v-model="form.packageAmount" :disabled="true"></el-input>
+                <el-button @click="increasePackage(1)">+1</el-button>
+                <el-button @click="increasePackage(10)">+10</el-button>
+              </div>
+            </el-form-item>
         </el-col>
         <el-col>
           <el-form-item label="报损原因" prop="damageReasonId">
@@ -48,26 +53,26 @@
           </el-form-item>
         </el-col>
       </el-row>
+
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
-          <el-form-item label="报损数量" prop="damageAmount">
-            <el-input-number v-model="form.damageAmount" :min="0" :precision="0"></el-input-number>
-          </el-form-item>
+            <el-form-item label="报损数量" prop="damageAmount" label-width="100px">
+              <div class="input-with-buttons">
+                <el-button @click="increaseDamage(-10)">-10</el-button>
+                <el-button @click="increaseDamage(-1)">-1</el-button>
+                <el-input v-model="form.damageAmount" :disabled="true"></el-input>
+                <el-button @click="increaseDamage(1)">+1</el-button>
+                <el-button @click="increaseDamage(10)">+10</el-button>
+              </div>
+            </el-form-item>
         </el-col>
         <el-col>
           <el-form-item>
-            <el-button @click="cancel">取消</el-button>
-            <el-button type="primary" @click="onSubmit">提交</el-button>
+            <el-button class="btn" @click="cancel">取消</el-button>
+            <el-button class="btn" type="primary" @click="onSubmit">提交</el-button>
           </el-form-item>
         </el-col>
       </el-row>
-
-      <el-row type="flex" justify="center" class="row-bg">
-        <el-col></el-col>
-
-        <el-col></el-col>
-      </el-row>
-
     </el-form>
   </div>
 </template>
@@ -201,6 +206,20 @@ export default {
     },
     cancel() {
       this.$router.back()
+    },
+
+    increasePackage(value) {
+      this.form.packageAmount += value
+      if (this.form.packageAmount <= 1) {
+        this.form.packageAmount = 1
+      }
+    },
+
+    increaseDamage(value) {
+      this.form.damageAmount += value
+      if (this.form.damageAmount <= 0) {
+        this.form.damageAmount = 0
+      }
     }
   }
 }
@@ -214,4 +233,13 @@ export default {
     padding: 20px 0;
   }
 }
+.input-with-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+    font-size: 25px; /* 放大字体 */
+    padding: 20px 20px; /* 放大按钮尺寸，根据需要调整 */
+  }
 </style>

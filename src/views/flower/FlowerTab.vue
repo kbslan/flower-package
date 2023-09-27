@@ -36,7 +36,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="tableData" height="500px" border style="width: 100%">
+    <el-table :data="tableData" fixed border  style="width: 100%" :show-summary="true" :summary-method="getSummary">
       <el-table-column prop="id" label="ID"> </el-table-column>
       <el-table-column prop="packageId" label="包花人" :formatter="formatPackage"> </el-table-column>
       <el-table-column prop="pickerId" label="采花人" :formatter="formatPicker"> </el-table-column>
@@ -57,7 +57,7 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[10, 20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
   </div>
 </template>
@@ -111,7 +111,7 @@ export default {
         // 页码
         page: 1,
         // 每页数据条数
-        size: 20,
+        size: 10,
         // 总数据条数
         total: 0
       },
@@ -252,6 +252,23 @@ export default {
           }
         })
       }
+    },
+    getSummary({ columns, data }) {
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计'
+          return
+        }
+        if (column.property === 'packageAmount' || column.property === 'damageAmount') {
+          const values = data.map(item => Number(item[column.property]) || 0)
+          const sum = values.reduce((prev, curr) => prev + curr, 0)
+          sums[index] = sum
+        } else {
+          sums[index] = ''
+        }
+      })
+      return sums
     }
   }
 }

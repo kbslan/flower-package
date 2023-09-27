@@ -23,3 +23,7 @@ export const flowerAudit = (params) =>
 // 管理员评价
 export const flowerRemark = (params) =>
   request({ url: '/api/package/flower/record/remark', params })
+
+// 一键通过查询结果数据
+export const auditAll = (data) =>
+  request({ url: '/api/package/flower/record/auditAll', method: 'POST', data })
