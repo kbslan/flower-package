@@ -104,7 +104,6 @@
 import localStorageManager from '@/utils/localFlowerRecord'
 import Config from '@/settings'
 import { flowerList, flowerDel, flowerAudit, flowerRemark, auditAll } from '@/api/flower'
-import { optionsList } from '@/api/options'
 import { exportFlower, exportDamage } from '@/api/exportdata'
 import dayjs from 'dayjs'
 
