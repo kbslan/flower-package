@@ -232,7 +232,7 @@ export default {
   padding: 10px;
 
   .row-bg {
-    padding: 20px 0;
+    padding: 10px 0;
   }
 }
 .input-with-buttons {
