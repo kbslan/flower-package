@@ -150,42 +150,42 @@ export default {
     }
   },
   created() {
-    // 采花人
-    optionsList({ type: 'flower_picker', yn: 1 }).then(data => {
-      const records = data.records || []
-      const pickers = records.map(item => ({
-        label: item.label,
-        value: item.id
-      }))
-      localStorageManager.save(Config.PickersKey, pickers)
-    })
-    // 品种
-    optionsList({ type: 'flower_category', yn: 1 }).then(data => {
-      const records = data.records || []
-      const categorys = records.map(item => ({
-        label: item.label,
-        value: item.id
-      }))
-      localStorageManager.save(Config.CategorysKey, categorys)
-    })
-    // 规格
-    optionsList({ type: 'flower_specification', yn: 1 }).then(data => {
-      const records = data.records || []
-      const specifications = records.map(item => ({
-        label: item.label,
-        value: item.id
-      }))
-      localStorageManager.save(Config.SpecificationsKey, specifications)
-    })
-    // 报损原因
-    optionsList({ type: 'flower_damage_reason', yn: 1 }).then(data => {
-      const records = data.records || []
-      const damageReasons = records.map(item => ({
-        label: item.label,
-        value: item.id
-      }))
-      localStorageManager.save(Config.DamageReasonsKey, damageReasons)
-    })
+    // // 采花人
+    // optionsList({ type: 'flower_picker', yn: 1 }).then(data => {
+    //   const records = data.records || []
+    //   const pickers = records.map(item => ({
+    //     label: item.label,
+    //     value: item.id
+    //   }))
+    //   localStorageManager.save(Config.PickersKey, pickers)
+    // })
+    // // 品种
+    // optionsList({ type: 'flower_category', yn: 1 }).then(data => {
+    //   const records = data.records || []
+    //   const categorys = records.map(item => ({
+    //     label: item.label,
+    //     value: item.id
+    //   }))
+    //   localStorageManager.save(Config.CategorysKey, categorys)
+    // })
+    // // 规格
+    // optionsList({ type: 'flower_specification', yn: 1 }).then(data => {
+    //   const records = data.records || []
+    //   const specifications = records.map(item => ({
+    //     label: item.label,
+    //     value: item.id
+    //   }))
+    //   localStorageManager.save(Config.SpecificationsKey, specifications)
+    // })
+    // // 报损原因
+    // optionsList({ type: 'flower_damage_reason', yn: 1 }).then(data => {
+    //   const records = data.records || []
+    //   const damageReasons = records.map(item => ({
+    //     label: item.label,
+    //     value: item.id
+    //   }))
+    //   localStorageManager.save(Config.DamageReasonsKey, damageReasons)
+    // })
 
     this.packages = localStorageManager.queryAll(Config.AuditPackagesKey)
     this.pickers = localStorageManager.queryAll(Config.PickersKey)

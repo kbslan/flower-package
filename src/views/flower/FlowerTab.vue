@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between" class="row-bg">
         <el-col>
           <el-form-item label="包花人" prop="packageId">
-            <el-select v-model="searchForm.packageId" placeholder="请选择包花人" clearable>
+            <el-select v-model="searchForm.packageId" placeholder="请选择包花人">
               <el-option :label="item.label" :value="item.value" v-for="item in packages" :key="item.value"> </el-option>
             </el-select>
           </el-form-item>
