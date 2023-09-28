@@ -10,7 +10,7 @@ const name = defaultSettings.title || 'Admin' // page title
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
-  publicPath: '/flower',
+  publicPath: '/',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
