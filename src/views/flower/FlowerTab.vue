@@ -53,12 +53,16 @@
         <el-col>
           <el-form-item>
             <el-button type="primary" @click="handleSearch">查询</el-button>
+          </el-form-item>
+          <el-form-item>
             <el-button @click="reset">重置</el-button>
           </el-form-item>
         </el-col>
         <el-col>
           <el-form-item>
             <el-button type="primary" @click="add">新增包花记录</el-button>
+          </el-form-item>
+          <el-form-item>
             <el-popconfirm title="确定提交吗？" v-if="tab==='local'" @confirm="submitLocal">
               <el-button type="primary" slot="reference">提交本地数据</el-button>
             </el-popconfirm>
