@@ -77,11 +77,11 @@
       <el-table-column prop="packageAmount" label="包花数量"> </el-table-column>
       <el-table-column prop="damageAmount" label="报损数量"></el-table-column>
       <el-table-column prop="damageReasonId" label="损坏原因" :formatter="formatDamageReason"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <div class="action-buttons">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
+            <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row)">
               <el-button type="text" slot="reference">删除</el-button>
             </el-popconfirm>
           </div>
@@ -89,7 +89,7 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[10, 20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[200, 300, 500, 1000, 2000]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
   </div>
 </template>
@@ -138,7 +138,7 @@ export default {
         damageReasonId: '',
         yn: '',
         page: 1,
-        size: 10
+        size: 200
       },
       ynList: [
         {
@@ -154,7 +154,7 @@ export default {
         // 页码
         page: 1,
         // 每页数据条数
-        size: 10,
+        size: 200,
         // 总数据条数
         total: 0
       },
@@ -287,6 +287,10 @@ export default {
       this.$router.push({ path: '/flower/flowerAdd', query: { tab: this.tab, flower: row } })
     },
     handleDelete(row) {
+      if (!row) {
+        this.$message.error('没有删除的数据')
+        return
+      }
       if (this.tab === 'local') {
         const key = Config.FlowRecordKey + this.userId
         const allRecords = localStorageManager.queryAll(key)

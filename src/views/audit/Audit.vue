@@ -81,7 +81,7 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[10, 20, 50, 100, 200]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[200, 300, 500, 1000, 2000]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
 
     <el-dialog title="评价" :visible.sync="dialogFormVisible">
@@ -132,13 +132,13 @@ export default {
         end: undefined,
         yn: 0,
         page: 1,
-        size: 10
+        size: 200
       },
       pagination: {
         // 页码
         page: 1,
         // 每页数据条数
-        size: 10,
+        size: 200,
         // 总数据条数
         total: 0
       },
@@ -149,43 +149,6 @@ export default {
     }
   },
   created() {
-    // // 采花人
-    // optionsList({ type: 'flower_picker', yn: 1 }).then(data => {
-    //   const records = data.records || []
-    //   const pickers = records.map(item => ({
-    //     label: item.label,
-    //     value: item.id
-    //   }))
-    //   localStorageManager.save(Config.PickersKey, pickers)
-    // })
-    // // 品种
-    // optionsList({ type: 'flower_category', yn: 1 }).then(data => {
-    //   const records = data.records || []
-    //   const categorys = records.map(item => ({
-    //     label: item.label,
-    //     value: item.id
-    //   }))
-    //   localStorageManager.save(Config.CategorysKey, categorys)
-    // })
-    // // 规格
-    // optionsList({ type: 'flower_specification', yn: 1 }).then(data => {
-    //   const records = data.records || []
-    //   const specifications = records.map(item => ({
-    //     label: item.label,
-    //     value: item.id
-    //   }))
-    //   localStorageManager.save(Config.SpecificationsKey, specifications)
-    // })
-    // // 报损原因
-    // optionsList({ type: 'flower_damage_reason', yn: 1 }).then(data => {
-    //   const records = data.records || []
-    //   const damageReasons = records.map(item => ({
-    //     label: item.label,
-    //     value: item.id
-    //   }))
-    //   localStorageManager.save(Config.DamageReasonsKey, damageReasons)
-    // })
-
     this.packages = localStorageManager.queryAll(Config.AuditPackagesKey)
     this.pickers = localStorageManager.queryAll(Config.PickersKey)
     this.categorys = localStorageManager.queryAll(Config.CategorysKey)
@@ -302,6 +265,10 @@ export default {
       this.$router.push({ path: '/flower/flowerAdd', query: { tab: 'server', flower: row } })
     },
     handleDelete(row) {
+      if (!row) {
+        this.$message.error('没有删除的数据')
+        return
+      }
       flowerDel({ ids: row.id })
         .then(data => {
           if (data) {
