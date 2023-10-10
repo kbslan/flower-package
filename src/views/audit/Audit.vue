@@ -81,7 +81,7 @@
       </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[200, 300, 500, 1000, 2000]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination :total="pagination.total" :current-page="pagination.page" :page-sizes="[100, 200, 300, 500, 1000, 2000]" :page-size="pagination.size" style="margin-top: 8px;" layout="prev, pager, next, total, sizes" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
 
     <el-dialog title="评价" :visible.sync="dialogFormVisible">
@@ -132,13 +132,13 @@ export default {
         end: undefined,
         yn: 0,
         page: 1,
-        size: 200
+        size: 100
       },
       pagination: {
         // 页码
         page: 1,
         // 每页数据条数
-        size: 200,
+        size: 100,
         // 总数据条数
         total: 0
       },
